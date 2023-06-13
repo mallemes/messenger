@@ -1,0 +1,77 @@
+<!doctype html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="layouts/base.html"
+      xmlns:th="http://www.thymeleaf.org">
+
+
+<div layout:fragment="content" class="mt-3">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card-header d-flex">
+                    <a href="{{route('profile.show', Auth::user())}}"><img style="border: 1px solid #DBDBDB; border-radius: 50%" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTDJzEaxLN-jGRYYUO65pWu7Q9GXoNt4LUSSA&usqp=CAU" alt="profile" width="50" height="50"></a>
+                    <div id="post-review" contenteditable="true" style="outline: none; padding: 10px; width: 90%"></div>
+                </div>
+                <div id="post-image" style="text-align: center;">
+                    <img src="#" id="post_image" alt="post" style="display: none">
+                </div>
+                <form action="{{route('posts.store')}}" class="d-flex align-items-center justify-content-center" method="post" enctype="multipart/form-data" style="padding: 10px;">
+                    <i id="post_image_button" class='bi bi-card-image' style="cursor:pointer;"></i>
+                    <input type="file" style="display: none" id="post_image_input" name="img" onchange="readURL(this)" />
+                    <textarea name="message" id="message" style="display: none"></textarea>
+                    <button type="submit" class="btn btn-primary" style="margin-left: 600px">send</button>
+                </form>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <div class="d-flex">
+                        <a href="{{route('profile.show', $post->user)}}"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTDJzEaxLN-jGRYYUO65pWu7Q9GXoNt4LUSSA&usqp=CAU" alt="profile" width="50" class="rounded-circle" style="border: 1px solid #DBDBDB"></a>
+                        <i class="bi bi-three-dots-vertical" style="position: absolute; right: 25px; cursor:pointer;" data-bs-toggle="dropdown" aria-expanded="false"></i>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{{route('posts.complain.form', $post->id)}}">message.complain</a></li>
+                            <li><a class="dropdown-item" href="#">{{__('message.share')}}</a></li>
+                            <li><a class="dropdown-item" href="{{route('posts.edit', $post->id)}}">message.edit</a></li>
+                            <li>
+                                <form action="{{route('posts.destroy', $post->id)}}" method="post">
+                                    <a href="#" class="dropdown-item"><button type="submit" class="border-0 bg-transparent">
+                                        message.delete</button></a>
+                                </form></li>
+                        </ul>
+                        <span><a href="{{route('profile.show', $post->user)}}" style="margin-left: 15px; margin-top: 5px; color: black">user->surname
+                                        <img src="{{asset('https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Twitter_Verified_Badge.svg/1200px-Twitter_Verified_Badge.svg.png')}}" alt="" width="15" style="margin-bottom: 1px;">
+                                    <span style="color:gray;">user->username</span></a>
+                            <br>
+                            <span style="font-size: 14px; color: gray; margin-left: 15px">2022.30.02</span>
+                        </span>
+                    </div>
+                    <a href="{{route('posts.show', $post->id)}}">
+                        <div style="margin-left: 55px; margin-bottom: 10px; margin-top: 5px;">
+                            <p style="color: black">post->message</p>
+                        </div>
+
+                    </a>
+                    <div class="post-btns" style="width: 610px; margin-left: auto; margin-right: auto;">
+                        <div style="float: left; display: flex">
+                            <form action="{{route('posts.rate', $post->id)}}" method="post">
+                                <button style="font-size: 12px; color:black" class="bg-transparent border-0" type="submit">message.like</button>
+                            </form>
+                            <form action="">
+                                <button style="font-size: 12px; color: gray" class="bg-transparent border-0"><a style="color: gray"
+                                                                                                                href="{{route('posts.show', $post->id)}}">age.comment</a></button>
+                            </form>
+                        </div>
+                        <div class="post-count" style="float: right">
+                            <span style="font-size: 12px; color: gray">post->likes message.likes</span>
+                            <span style="font-size: 12px; color: gray; margin-left: 10px">123 message.comments</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</div>
+
+</html>
