@@ -216,41 +216,40 @@
 
     <ul class="sidebar-nav" id="sidebar-nav">
         <li class="nav-item">
-            <a class="nav-link collapsed" href="{{route('index')}}">
+            <a class="nav-link collapsed" href="/">
                 <i class="bi bi-app"></i>
                 <span>home</span>
             </a>
         </li><!-- End Profile Page Nav -->
 
         <li class="nav-item">
-            <a class="nav-link collapsed" href="pages-faq.html">
-                <i class="ri-search-2-line"></i>
-                <span>search</span>
-            </a>
-        </li>
-
-        <li class="nav-item">
-            <a class="nav-link collapsed" href="{{route('login.form')}}">
+            <a class="nav-link collapsed" th:href="@{'/login'}">
                 <i class="bi bi-door-closed"></i>
                 <span>login</span>
             </a>
         </li>
+        <li class="nav-item">
+            <a class="nav-link collapsed" th:href="@{'/register'}">
+                <i class='bx bxs-user-check'></i>
+                <span>register</span>
+            </a>
+        </li>
 
         <li class="nav-item">
-            <a class="nav-link collapsed" href="{{route('profile.show', Auth::user())}}">
+            <a class="nav-link collapsed" th:href="@{'/profile'}">
                 <i class="bi bi-file-person-fill"></i>
-                <span>profil</span>
+                <span>profile</span>
             </a>
         </li>
         <li class="nav-item">
-            <a href="{{route('settings')}}" class="nav-link collapsed">
+            <a href="" class="nav-link collapsed">
                 <i class="bx bx-cog"></i>
                 <span>settings</span>
             </a>
         </li>
 
         <li class="nav-item">
-            <a href="{{route('control.index')}}" class="nav-link collapsed">
+            <a href="" class="nav-link collapsed">
                 <i class="bx bx-cog"></i>
                 <span>Control</span>
             </a>
