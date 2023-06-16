@@ -5,10 +5,7 @@ import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "t_users")
@@ -35,6 +32,24 @@ public class User implements UserDetails {
 
     @Column(name = "last_name", length = 50)
     private String lastName;
+
+    @Column(name = "job")
+    private String job;
+
+    @Column(name = "avatar")
+    private String avatar;
+
+    @Column(name = "phone_number")
+    private String phoneNumber;
+
+    @Column(name = "last_online")
+    private Date lastOnlineDate;
+
+    @Column(name = "bio" )
+    private String bio;
+
+    @Column(name = "created_date")
+    private Date createdDate;
 
     @ManyToMany(fetch = FetchType.EAGER)
     private List<Permission> permissions;
