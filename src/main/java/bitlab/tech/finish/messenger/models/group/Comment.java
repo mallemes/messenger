@@ -1,15 +1,13 @@
 package bitlab.tech.finish.messenger.models.group;
 
 
+import bitlab.tech.finish.messenger.models.BaseModel;
 import bitlab.tech.finish.messenger.models.User;
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "t_groups")
-public class Comment {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class Comment extends BaseModel {
 
     @Column(name = "text")
     private String text;

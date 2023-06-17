@@ -1,5 +1,6 @@
 package bitlab.tech.finish.messenger.models.group;
 
+import bitlab.tech.finish.messenger.models.BaseModel;
 import bitlab.tech.finish.messenger.models.User;
 import jakarta.persistence.*;
 
@@ -7,12 +8,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "t_group_posts")
-public class GroupPost {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Long id;
+public class GroupPost extends BaseModel {
 
     @Column(name = "text")
     private String text;

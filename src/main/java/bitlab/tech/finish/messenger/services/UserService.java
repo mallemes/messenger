@@ -29,6 +29,10 @@ public class UserService implements UserDetailsService {
         }
     }
 
+    public User getUserByUsername(String username){
+        return userRepository.findByUsername(username);
+    }
+
     public User addUser(User user) {
         User checkUser = userRepository.findByUsername(user.getUsername());
         if (checkUser == null) {

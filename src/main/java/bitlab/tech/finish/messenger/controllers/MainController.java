@@ -1,24 +1,25 @@
 package bitlab.tech.finish.messenger.controllers;
+
 import bitlab.tech.finish.messenger.models.Post;
 import bitlab.tech.finish.messenger.models.User;
 import bitlab.tech.finish.messenger.services.PostService;
 import bitlab.tech.finish.messenger.services.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
+@RequiredArgsConstructor
 public class MainController {
 
-    @Autowired
-    private UserService userService;
-
-    @Autowired
-    private PostService postService;
+    private final UserService userService;
+    private final PostService postService;
 
     @GetMapping(value = "/")
     public String indexPage() {
@@ -35,12 +36,26 @@ public class MainController {
         return "register";
     }
 
-    @PreAuthorize("isAuthenticated()")
-    @GetMapping(value = "/profile")
-    public String profilePage(Model model) {
-        model.addAttribute("user", userService.getCurrentSessionUser());
-        return "profile";
+    @GetMapping(value = "/profile/{username}")
+    public String profilePage(@PathVariable String username, Model model) {
+        User user = userService.getUserByUsername(username);
+        if (user == null) {
+            return "redirect:/errors/404";
+        }
+        User authUser = userService.getCurrentSessionUser();
+        if (authUser != null && authUser.getId().equals(user.getId())) {
+            model.addAttribute("user", userService.getCurrentSessionUser());
+            return "profile"; // auth user to auth user profile
+        } else if (authUser != null) {
+            model.addAttribute("user", user);
+            return "profiles/auth-u-to-u-prf"; // auth user to user profile
+        } else {
+            model.addAttribute("user", user);
+            return "profiles/anon-u-to-u-prf"; // anon user to user profile
+        }
+
     }
+
 
     @GetMapping(value = "errors/403")
     public String accessDenied() {
@@ -66,6 +81,7 @@ public class MainController {
             return "redirect:/register?password_error";
         }
     }
+
     @PreAuthorize("isAuthenticated()")
     @PostMapping(value = "/auth-profile/create/post")
     public String toUpdateProfile(Post post) {
@@ -91,5 +107,13 @@ public class MainController {
         } else {
             return "redirect:/update-password-page?passwordmismatch";
         }
+    }
+
+
+    // Authenticated users can access this page
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping(value = "/profile")
+    public String userProfile() {
+        return "redirect:/profile/" + userService.getCurrentSessionUser().getUsername();
     }
 }

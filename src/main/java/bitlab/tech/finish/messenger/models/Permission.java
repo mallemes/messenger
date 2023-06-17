@@ -9,12 +9,7 @@ import org.springframework.security.core.GrantedAuthority;
 @Table(name = "t_permissions")
 @Getter
 @Setter
-public class Permission implements GrantedAuthority {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Long id;
+public class Permission extends BaseModel implements GrantedAuthority {
 
     @Column(name = "role")
     private String role;

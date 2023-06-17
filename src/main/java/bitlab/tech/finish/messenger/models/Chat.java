@@ -11,10 +11,7 @@ import java.util.Date;
 @Table(name = "t_user_chats")
 @Getter
 @Setter
-public class Chat {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class Chat extends BaseModel {
 
     @ManyToOne
     @JoinColumn(name = "from_user_id")
@@ -24,12 +21,9 @@ public class Chat {
     @JoinColumn(name = "to_user_id")
     private User toUser;
 
-    @Column(name = "message", nullable = true)
+    @Column(name = "message", columnDefinition = "TEXT")
     private String message;
 
-    @Column(name = "date", nullable = true)
-    private Date date;
-
-    @Column(name = "image", nullable = true)
+    @Column(name = "image")
     private String image;
 }

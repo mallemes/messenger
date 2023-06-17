@@ -1,22 +1,23 @@
 package bitlab.tech.finish.messenger.models;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.*;
+import java.time.LocalDateTime;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "t_users")
 @Getter
 @Setter
-public class User implements UserDetails {
+public class User extends BaseModel implements UserDetails  {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Long id;
 
     @Column(name = "email", unique = true)
     private String email;
@@ -43,13 +44,12 @@ public class User implements UserDetails {
     private String phoneNumber;
 
     @Column(name = "last_online")
-    private Date lastOnlineDate;
+    private LocalDateTime lastOnlineDate;
 
-    @Column(name = "bio" )
+    @Column(name = "bio" ,columnDefinition = "TEXT")
     private String bio;
 
-    @Column(name = "created_date")
-    private Date createdDate;
+
 
     @ManyToMany(fetch = FetchType.EAGER)
     private List<Permission> permissions;

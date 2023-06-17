@@ -1,33 +1,31 @@
 package bitlab.tech.finish.messenger.models;
 
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "t_user_posts")
-@Data
-public class Post {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+@Getter
+@Setter
+public class Post extends BaseModel {
 
+    @Column(name = "title")
+    private String message;
 
+    @Column(name = "text", columnDefinition = "TEXT")
+    private String text;
+
+    @Column(name = "image")
+    private String image;
 
     @ManyToOne
     private User user;
-
-    @Column(name = "title", nullable = true)
-    private String message;
-
-    @Column(name = "date", nullable = true)
-    private Date date;
-
-    @Column(name = "text", nullable = true)
-    private String text;
-
-    @Column(name = "image", nullable = true)
-    private String image;
 }
