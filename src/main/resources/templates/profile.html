@@ -13,7 +13,7 @@
                     <div class="card">
                         <div class="card-body profile-card pt-4 d-flex flex-column align-items-center h-100">
 
-                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTDJzEaxLN-jGRYYUO65pWu7Q9GXoNt4LUSSA&usqp=CAU"
+                            <img th:src="${user.avatar}"
                                  alt="Profile" class="rounded-circle">
                             <h2>Kevin Anderson</h2>
                             <h3>Web Designer</h3>
@@ -79,33 +79,34 @@
                                 <div class="tab-pane fade profile-edit pt-3" id="profile-edit">
 
                                     <!-- Profile Edit Form -->
-                                    <form>
+                                    <form th:action="@{'/profile/update/user/data'}" method="post" enctype="multipart/form-data">
                                         <div class="row mb-3">
                                             <label class="col-md-4 col-lg-3 col-form-label">Profile Image</label>
                                             <div class="col-md-8 col-lg-9">
-                                                <img src="assets/img/profile-img.jpg" alt="Profile">
+                                                <img th:src="${user.avatar}" alt="Profile">
                                                 <div class="pt-2">
-                                                    <a href="#" class="btn btn-primary btn-sm"
-                                                       title="Upload new profile image"><i class="bi bi-upload"></i></a>
-                                                    <a href="#" class="btn btn-danger btn-sm"
-                                                       title="Remove my profile image"><i class="bi bi-trash"></i></a>
+                                                    <input type="file" name="avatarFile" class="form-control">
+<!--                                                    <a href="#" class="btn btn-primary btn-sm"-->
+<!--                                                       title="Upload new profile image"><i class="bi bi-upload"></i></a>-->
+<!--                                                    <a href="#" class="btn btn-danger btn-sm"-->
+<!--                                                       title="Remove my profile image"><i class="bi bi-trash"></i></a>-->
                                                 </div>
                                             </div>
                                         </div>
 
                                         <div class="row mb-3">
-                                            <label for="fullName" class="col-md-4 col-lg-3 col-form-label">Full
-                                                Name</label>
+                                            <label for="firstName" class="col-md-4 col-lg-3 col-form-label">
+                                                F Name</label>
                                             <div class="col-md-8 col-lg-9">
-                                                <input name="fullName" type="text" class="form-control" id="fullName"
+                                                <input name="firstName" type="text" class="form-control" id="firstName"
                                                        value="Kevin Anderson">
                                             </div>
                                         </div>
 
                                         <div class="row mb-3">
-                                            <label for="about" class="col-md-4 col-lg-3 col-form-label">About</label>
+                                            <label for="bio" class="col-md-4 col-lg-3 col-form-label">Bio</label>
                                             <div class="col-md-8 col-lg-9">
-                                                <textarea name="about" class="form-control" id="about"
+                                                <textarea name="bio" class="form-control" id="bio"
                                                           style="height: 100px">Sunt est soluta temporibus accusantium neque nam maiores cumque temporibus. Tempora libero non est unde veniam est qui dolor. Ut sunt iure rerum quae quisquam autem eveniet perspiciatis odit. Fuga sequi sed ea saepe at unde.</textarea>
                                             </div>
                                         </div>
@@ -117,10 +118,10 @@
                                             </div>
                                         </div>
                                         <div class="row mb-3">
-                                            <label for="Country"
-                                                   class="col-md-4 col-lg-3 col-form-label">Country</label>
+                                            <label for="lastName"
+                                                   class="col-md-4 col-lg-3 col-form-label">lastName</label>
                                             <div class="col-md-8 col-lg-9">
-                                                <input name="country" type="text" class="form-control" id="Country"
+                                                <input name="lastName" type="text" class="form-control" id="lastName"
                                                        value="USA">
                                             </div>
                                         </div>
@@ -128,7 +129,7 @@
                                         <div class="row mb-3">
                                             <label for="Phone" class="col-md-4 col-lg-3 col-form-label">Phone</label>
                                             <div class="col-md-8 col-lg-9">
-                                                <input name="phone" type="text" class="form-control" id="Phone"
+                                                <input name="phoneNumber" type="text" class="form-control" id="Phone"
                                                        value="(436) 486-3538 x29071">
                                             </div>
                                         </div>
@@ -141,6 +142,8 @@
                                             </div>
                                         </div>
                                         <div class="text-center">
+                                            <input type="hidden" th:value="${user.id}" name="id">
+<!--                                            <input type="hidden" th:value="${user.username}" name="username">-->
                                             <button type="submit" class="btn btn-primary">Save Changes</button>
                                         </div>
                                     </form><!-- End Profile Edit Form -->

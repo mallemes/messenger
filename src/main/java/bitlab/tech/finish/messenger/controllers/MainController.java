@@ -2,6 +2,7 @@ package bitlab.tech.finish.messenger.controllers;
 
 import bitlab.tech.finish.messenger.models.Post;
 import bitlab.tech.finish.messenger.models.User;
+import bitlab.tech.finish.messenger.services.FileStorageService;
 import bitlab.tech.finish.messenger.services.PostService;
 import bitlab.tech.finish.messenger.services.UserService;
 import lombok.RequiredArgsConstructor;
@@ -9,10 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 @Controller
 @RequiredArgsConstructor
@@ -20,7 +21,7 @@ public class MainController {
 
     private final UserService userService;
     private final PostService postService;
-
+    private final FileStorageService fileStorageService;
     @GetMapping(value = "/")
     public String indexPage() {
         return "index";
@@ -114,6 +115,34 @@ public class MainController {
     @PreAuthorize("isAuthenticated()")
     @GetMapping(value = "/profile")
     public String userProfile() {
-        return "redirect:/profile/" + userService.getCurrentSessionUser().getUsername();
+        User user = userService.getCurrentSessionUser();
+        String d = user.getUsername();
+        return "redirect:/profile/" + d;
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping(value = "/profile/update/user/data")
+    public String updateUser(
+            @RequestParam("avatarFile") MultipartFile avatarFile,
+                             @RequestParam("firstName") String firstName,
+                             @RequestParam("lastName") String lastName,
+                             @RequestParam("email") String email,
+                             @RequestParam("phoneNumber") String phone,
+                             @RequestParam("bio") String about) {
+        try {
+            User user = userService.getCurrentSessionUser();
+            user.setFirstName(firstName);
+            user.setLastName(lastName);
+            user.setEmail(email);
+            user.setPhoneNumber(phone);
+            user.setBio(about);
+            String fileName = fileStorageService.saveFile(avatarFile);
+            String filePath = "/images/" + fileName;
+            user.setAvatar(filePath);
+            userService.saveUser(user);
+            return "redirect:/profile/" + user.getUsername();
+        } catch (IOException e) {
+            return "redirect:/register?error";
+        }
     }
 }

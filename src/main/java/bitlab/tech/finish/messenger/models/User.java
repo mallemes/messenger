@@ -3,6 +3,7 @@ package bitlab.tech.finish.messenger.models;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -22,10 +23,10 @@ public class User extends BaseModel implements UserDetails  {
     @Column(name = "email", unique = true)
     private String email;
 
-    @Column(name = "username", unique = true, nullable = false)
+    @Column(name = "username", unique = true)
     private String username;
 
-    @Column(name = "password", nullable = false)
+    @Column(name = "password")
     private String password;
 
     @Column(name = "first_name", length = 50)
@@ -37,7 +38,7 @@ public class User extends BaseModel implements UserDetails  {
     @Column(name = "job")
     private String job;
 
-    @Column(name = "avatar")
+    @Column(name = "avatar" ,columnDefinition = "TEXT")
     private String avatar;
 
     @Column(name = "phone_number")
