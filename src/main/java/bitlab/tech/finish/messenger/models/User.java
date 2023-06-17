@@ -67,7 +67,7 @@ public class User extends BaseModel implements UserDetails  {
 
     @Override
     public String getUsername() {
-        return this.email == null ? this.username : this.email;
+        return this.username;
     }
 
     @Override

@@ -38,11 +38,10 @@ public class SecurityConfig {
         http.formLogin()
                 .loginPage("/login")  // "/sign-in-page" Controller page
                 .loginProcessingUrl("/to-enter") // <form action = "/to-enter" method = "post">
-                .usernameParameter("username") // <input type = "email" name = "user_email">
-                .passwordParameter("password") // <input type = "password" name = "user_password">
+                .usernameParameter("username") // <input type = "text" name = "username">
+                .passwordParameter("password") // <input type = "password" name = "password">
                 .defaultSuccessUrl("/profile") // response.sendRedirect("/profile")
                 .failureUrl("/login?auth_error");
-
         http.logout()
                 .logoutUrl("/logout") // post request to /sign-out
                 .logoutSuccessUrl("/login");

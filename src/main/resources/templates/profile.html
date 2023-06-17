@@ -15,8 +15,8 @@
 
                             <img th:src="${user.avatar}"
                                  alt="Profile" class="rounded-circle">
-                            <h2>Kevin Anderson</h2>
-                            <h3>Web Designer</h3>
+                            <h2 th:text="${user.username}"></h2>
+                            <h3 th:text="${user.job != null ? user.job : 'not specified'}"></h3>
                         </div>
                     </div>
 
@@ -47,31 +47,28 @@
                             <div class="tab-content pt-2">
 
                                 <div class="tab-pane fade show active profile-overview" id="profile-overview">
-                                    <h5 class="card-title">About</h5>
-                                    <p class="small fst-italic">Sunt est soluta temporibus accusantium neque nam maiores
-                                        cumque temporibus. Tempora libero non est unde veniam est qui dolor. Ut sunt
-                                        iure rerum quae quisquam autem eveniet perspiciatis odit. Fuga sequi sed ea
-                                        saepe at unde.</p>
+                                    <h5 class="card-title">BIO</h5>
+                                    <p class="small fst-italic" th:text="${user.bio}"></p>
 
                                     <h5 class="card-title">Profile Details</h5>
 
                                     <div class="row">
                                         <div class="col-lg-3 col-md-4 label ">Full Name</div>
-                                        <div class="col-lg-9 col-md-8">Kevin Anderson</div>
+                                        <div class="col-lg-9 col-md-8" th:text="${user.firstName +' '+user.lastName}"></div>
                                     </div>
 
                                     <div class="row">
                                         <div class="col-lg-3 col-md-4 label">Phone</div>
-                                        <div class="col-lg-9 col-md-8">(436) 486-3538 x29071</div>
+                                        <div class="col-lg-9 col-md-8" th:text="${user.phoneNumber}"></div>
                                     </div>
                                     <div class="row">
                                         <div class="col-lg-3 col-md-4 label">Job</div>
-                                        <div class="col-lg-9 col-md-8">Web designer</div>
+                                        <div class="col-lg-9 col-md-8" th:text="${user.job}"></div>
                                     </div>
 
                                     <div class="row">
                                         <div class="col-lg-3 col-md-4 label">Email</div>
-                                        <div class="col-lg-9 col-md-8">k.anderson@example.com</div>
+                                        <div class="col-lg-9 col-md-8" th:text="${user.email}"></div>
                                     </div>
 
                                 </div>
@@ -96,10 +93,10 @@
 
                                         <div class="row mb-3">
                                             <label for="firstName" class="col-md-4 col-lg-3 col-form-label">
-                                                F Name</label>
+                                                First Name</label>
                                             <div class="col-md-8 col-lg-9">
                                                 <input name="firstName" type="text" class="form-control" id="firstName"
-                                                       value="Kevin Anderson">
+                                                       th:value="${user.firstName}">
                                             </div>
                                         </div>
 
@@ -107,22 +104,22 @@
                                             <label for="bio" class="col-md-4 col-lg-3 col-form-label">Bio</label>
                                             <div class="col-md-8 col-lg-9">
                                                 <textarea name="bio" class="form-control" id="bio"
-                                                          style="height: 100px">Sunt est soluta temporibus accusantium neque nam maiores cumque temporibus. Tempora libero non est unde veniam est qui dolor. Ut sunt iure rerum quae quisquam autem eveniet perspiciatis odit. Fuga sequi sed ea saepe at unde.</textarea>
+                                                          style="height: 100px" th:text="${user.bio}"></textarea>
                                             </div>
                                         </div>
                                         <div class="row mb-3">
                                             <label for="Job" class="col-md-4 col-lg-3 col-form-label">Job</label>
                                             <div class="col-md-8 col-lg-9">
                                                 <input name="job" type="text" class="form-control" id="Job"
-                                                       value="Web Designer">
+                                                       th:value="${user.job}">
                                             </div>
                                         </div>
                                         <div class="row mb-3">
                                             <label for="lastName"
-                                                   class="col-md-4 col-lg-3 col-form-label">lastName</label>
+                                                   class="col-md-4 col-lg-3 col-form-label">Last Name</label>
                                             <div class="col-md-8 col-lg-9">
                                                 <input name="lastName" type="text" class="form-control" id="lastName"
-                                                       value="USA">
+                                                       th:value="${user.lastName}">
                                             </div>
                                         </div>
 
@@ -130,7 +127,7 @@
                                             <label for="Phone" class="col-md-4 col-lg-3 col-form-label">Phone</label>
                                             <div class="col-md-8 col-lg-9">
                                                 <input name="phoneNumber" type="text" class="form-control" id="Phone"
-                                                       value="(436) 486-3538 x29071">
+                                                       th:value="${user.phoneNumber}">
                                             </div>
                                         </div>
 
@@ -138,12 +135,10 @@
                                             <label for="Email" class="col-md-4 col-lg-3 col-form-label">Email</label>
                                             <div class="col-md-8 col-lg-9">
                                                 <input name="email" type="email" class="form-control" id="Email"
-                                                       value="k.anderson@example.com">
+                                                       th:value="${user.email}">
                                             </div>
                                         </div>
                                         <div class="text-center">
-                                            <input type="hidden" th:value="${user.id}" name="id">
-<!--                                            <input type="hidden" th:value="${user.username}" name="username">-->
                                             <button type="submit" class="btn btn-primary">Save Changes</button>
                                         </div>
                                     </form><!-- End Profile Edit Form -->
