@@ -17,6 +17,10 @@ public class MainController {
         return "index";
     }
 
+    @GetMapping(value = "/chat")
+    public String errorPage() {
+        return "chat";
+    }
     @GetMapping(value = "/login")
     public String loginPage() {
         return "login";

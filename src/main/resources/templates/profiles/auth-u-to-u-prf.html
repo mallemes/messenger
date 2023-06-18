@@ -13,179 +13,56 @@
                     <div class="card">
                         <div class="card-body profile-card pt-4 d-flex flex-column align-items-center h-100">
 
-                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTDJzEaxLN-jGRYYUO65pWu7Q9GXoNt4LUSSA&usqp=CAU"
+                            <img th:src="${user.avatar}"
                                  alt="Profile" class="rounded-circle">
-                            <h2>Kevin Anderson</h2>
-                            <h3>Web Designer</h3>
+                            <h2 th:text="${user.username}"></h2>
+                            <h3 th:text="${user.job != null ? user.job : 'not specified'}"></h3>
+                            <div class="d-flex justify-content-around">
+                                <form action="">
+                                    <button class="btn link"><i style="font-size: 2rem" class="bi bi-person-plus"></i></button>
+                                </form>
+                                <form action="">
+                                    <button class="btn link"><i style="font-size: 2rem" class="bi bi-chat-right"></i></button>
+                                </form>
+                            </div>
+
                         </div>
                     </div>
 
                 </div>
 
                 <div class="col-xl-8">
-
                     <div class="card">
                         <div class="card-body pt-3">
-                            <!-- Bordered Tabs -->
-                            <ul class="nav nav-tabs nav-tabs-bordered">
-                                <li class="nav-item">
-                                    <button class="nav-link active" data-bs-toggle="tab"
-                                            data-bs-target="#profile-overview">Overview
-                                    </button>
-                                </li>
-                                <li class="nav-item">
-                                    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-edit">Edit
-                                        Profile
-                                    </button>
-                                </li>
-                                <li class="nav-item">
-                                    <button class="nav-link" data-bs-toggle="tab"
-                                            data-bs-target="#profile-change-password">Change Password
-                                    </button>
-                                </li>
-                            </ul>
                             <div class="tab-content pt-2">
-
                                 <div class="tab-pane fade show active profile-overview" id="profile-overview">
-                                    <h5 class="card-title">About</h5>
-                                    <p class="small fst-italic">Sunt est soluta temporibus accusantium neque nam maiores
-                                        cumque temporibus. Tempora libero non est unde veniam est qui dolor. Ut sunt
-                                        iure rerum quae quisquam autem eveniet perspiciatis odit. Fuga sequi sed ea
-                                        saepe at unde.</p>
+                                    <h5 class="card-title">BIO</h5>
+                                    <p class="small fst-italic" th:text="${user.bio}"></p>
 
                                     <h5 class="card-title">Profile Details</h5>
 
                                     <div class="row">
                                         <div class="col-lg-3 col-md-4 label ">Full Name</div>
-                                        <div class="col-lg-9 col-md-8">Kevin Anderson</div>
+                                        <div class="col-lg-9 col-md-8"
+                                             th:text="${user.firstName +' '+user.lastName}"></div>
                                     </div>
 
                                     <div class="row">
                                         <div class="col-lg-3 col-md-4 label">Phone</div>
-                                        <div class="col-lg-9 col-md-8">(436) 486-3538 x29071</div>
+                                        <div class="col-lg-9 col-md-8" th:text="${user.phoneNumber}"></div>
                                     </div>
                                     <div class="row">
                                         <div class="col-lg-3 col-md-4 label">Job</div>
-                                        <div class="col-lg-9 col-md-8">Web designer</div>
+                                        <div class="col-lg-9 col-md-8" th:text="${user.job}"></div>
                                     </div>
 
                                     <div class="row">
                                         <div class="col-lg-3 col-md-4 label">Email</div>
-                                        <div class="col-lg-9 col-md-8">k.anderson@example.com</div>
+                                        <div class="col-lg-9 col-md-8" th:text="${user.email}"></div>
                                     </div>
 
                                 </div>
-
-                                <div class="tab-pane fade profile-edit pt-3" id="profile-edit">
-
-                                    <!-- Profile Edit Form -->
-                                    <form>
-                                        <div class="row mb-3">
-                                            <label class="col-md-4 col-lg-3 col-form-label">Profile Image</label>
-                                            <div class="col-md-8 col-lg-9">
-                                                <img src="assets/img/profile-img.jpg" alt="Profile">
-                                                <div class="pt-2">
-                                                    <a href="#" class="btn btn-primary btn-sm"
-                                                       title="Upload new profile image"><i class="bi bi-upload"></i></a>
-                                                    <a href="#" class="btn btn-danger btn-sm"
-                                                       title="Remove my profile image"><i class="bi bi-trash"></i></a>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="row mb-3">
-                                            <label for="fullName" class="col-md-4 col-lg-3 col-form-label">Full
-                                                Name</label>
-                                            <div class="col-md-8 col-lg-9">
-                                                <input name="fullName" type="text" class="form-control" id="fullName"
-                                                       value="Kevin Anderson">
-                                            </div>
-                                        </div>
-
-                                        <div class="row mb-3">
-                                            <label for="about" class="col-md-4 col-lg-3 col-form-label">About</label>
-                                            <div class="col-md-8 col-lg-9">
-                                                <textarea name="about" class="form-control" id="about"
-                                                          style="height: 100px">Sunt est soluta temporibus accusantium neque nam maiores cumque temporibus. Tempora libero non est unde veniam est qui dolor. Ut sunt iure rerum quae quisquam autem eveniet perspiciatis odit. Fuga sequi sed ea saepe at unde.</textarea>
-                                            </div>
-                                        </div>
-                                        <div class="row mb-3">
-                                            <label for="Job" class="col-md-4 col-lg-3 col-form-label">Job</label>
-                                            <div class="col-md-8 col-lg-9">
-                                                <input name="job" type="text" class="form-control" id="Job"
-                                                       value="Web Designer">
-                                            </div>
-                                        </div>
-                                        <div class="row mb-3">
-                                            <label for="Country"
-                                                   class="col-md-4 col-lg-3 col-form-label">Country</label>
-                                            <div class="col-md-8 col-lg-9">
-                                                <input name="country" type="text" class="form-control" id="Country"
-                                                       value="USA">
-                                            </div>
-                                        </div>
-
-                                        <div class="row mb-3">
-                                            <label for="Phone" class="col-md-4 col-lg-3 col-form-label">Phone</label>
-                                            <div class="col-md-8 col-lg-9">
-                                                <input name="phone" type="text" class="form-control" id="Phone"
-                                                       value="(436) 486-3538 x29071">
-                                            </div>
-                                        </div>
-
-                                        <div class="row mb-3">
-                                            <label for="Email" class="col-md-4 col-lg-3 col-form-label">Email</label>
-                                            <div class="col-md-8 col-lg-9">
-                                                <input name="email" type="email" class="form-control" id="Email"
-                                                       value="k.anderson@example.com">
-                                            </div>
-                                        </div>
-                                        <div class="text-center">
-                                            <button type="submit" class="btn btn-primary">Save Changes</button>
-                                        </div>
-                                    </form><!-- End Profile Edit Form -->
-
-                                </div>
-                                <div class="tab-pane fade pt-3" id="profile-change-password">
-                                    <!-- Change Password Form -->
-                                    <form>
-
-                                        <div class="row mb-3">
-                                            <label for="currentPassword" class="col-md-4 col-lg-3 col-form-label">Current
-                                                Password</label>
-                                            <div class="col-md-8 col-lg-9">
-                                                <input name="password" type="password" class="form-control"
-                                                       id="currentPassword">
-                                            </div>
-                                        </div>
-
-                                        <div class="row mb-3">
-                                            <label for="newPassword" class="col-md-4 col-lg-3 col-form-label">New
-                                                Password</label>
-                                            <div class="col-md-8 col-lg-9">
-                                                <input name="newpassword" type="password" class="form-control"
-                                                       id="newPassword">
-                                            </div>
-                                        </div>
-
-                                        <div class="row mb-3">
-                                            <label for="renewPassword" class="col-md-4 col-lg-3 col-form-label">Re-enter
-                                                New Password</label>
-                                            <div class="col-md-8 col-lg-9">
-                                                <input name="renewpassword" type="password" class="form-control"
-                                                       id="renewPassword">
-                                            </div>
-                                        </div>
-
-                                        <div class="text-center">
-                                            <button type="submit" class="btn btn-primary">Change Password</button>
-                                        </div>
-                                    </form><!-- End Change Password Form -->
-
-                                </div>
-
                             </div><!-- End Bordered Tabs -->
-
                         </div>
                     </div>
 
@@ -194,35 +71,13 @@
         </section>
 
         <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="card">
-                    <div class="card-header d-flex">
-                        <a href=""><img
-                                style="border: 1px solid #DBDBDB; border-radius: 50%"
-                                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTDJzEaxLN-jGRYYUO65pWu7Q9GXoNt4LUSSA&usqp=CAU"
-                                alt="profile" width="50" height="50"></a>
-                        <input id="post-review" type="text" placeholder="What's on your mind?" class="form-control"
-                               style="outline: none; padding: 10px; width: 90%">
-                    </div>
-                    <div id="post-image" style="text-align: center;">
-                        <img src="#" id="post_image" alt="post" style="display: none">
-                    </div>
-                    <form th:action="@{'/auth-profile/create/post'}" class="d-flex align-items-center justify-content-center"
-                          method="post" enctype="multipart/form-data" style="padding: 10px;">
-                        <i id="post_image_button" class='bi bi-card-image' style="cursor:pointer;"></i>
-                        <input type="file" style="display: none" id="post_image_input" name="img"
-                               onchange="readURL(this)"/>
-                        <button type="submit" class="btn btn-primary" style="margin-left: 300px">send</button>
-                    </form>
-                </div>
-            </div>
             <!--      foreach loop      -->
-            <div class="col-md-8">
+            <div class="col-md-8" th:each="post: ${user.posts}">
                 <div class="card">
                     <div class="card-header">
                         <div class="d-flex">
-                            <a href="{{route('profile.show', $post->user)}}"><img
-                                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTDJzEaxLN-jGRYYUO65pWu7Q9GXoNt4LUSSA&usqp=CAU"
+                            <a th:href="@{'/profile/' + ${user.username}}"><img
+                                    th:src="${user.avatar}"
                                     alt="profile" width="50"
                                     class="rounded-circle"
                                     style="border: 1px solid #DBDBDB"></a>
@@ -231,11 +86,11 @@
                                aria-expanded="false"></i>
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item"
-                                       href="{{route('posts.complain.form', $post->id)}}">complain</a></li>
+                                       href="#">complain</a></li>
                                 <li><a class="dropdown-item" href="#">share</a></li>
-                                <li><a class="dropdown-item" href="{{route('posts.edit', $post->id)}}">edit</a></li>
+                                <li><a class="dropdown-item" href="#">edit</a></li>
                                 <li>
-                                    <form action="{{route('posts.destroy', $post->id)}}" method="post">
+                                    <form action="#" method="post">
 
                                         <a href="#" class="dropdown-item">
                                             <button type="submit" class="border-0 bg-transparent">
@@ -245,22 +100,22 @@
                                     </form>
                                 </li>
                             </ul>
-                            <span><a href="{{route('profile.show', $post->user)}}"
+                            <span><a href="#"
                                      style="margin-left: 15px; margin-top: 5px; color: black">user full name
                                             <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Twitter_Verified_Badge.svg/1200px-Twitter_Verified_Badge.svg.png"
                                                  alt="" width="15" style="margin-bottom: 1px;">
                                     <span style="color:gray;"></span></a>
                             <br>
-                            <span style="font-size: 14px; color: gray; margin-left: 15px">23.2.2021</span>
+                            <span style="font-size: 14px; color: gray; margin-left: 15px" th:text="${post.createdAt}"></span>
                         </span>
                         </div>
                         <a href="#">
                             <div style="margin-left: 55px; margin-bottom: 10px; margin-top: 5px;">
-                                <p style="color: black">message</p>
+                                <p style="color: black" th:text="${post.text}"></p>
                             </div>
-                            <div style="text-align: center; padding-bottom: 20px">
-                                <a href="{{route('posts.show', $post->id)}}"><img
-                                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTDJzEaxLN-jGRYYUO65pWu7Q9GXoNt4LUSSA&usqp=CAU"
+                            <div th:if="${post.image != null}" style="text-align: center; padding-bottom: 20px">
+                                <a href="#"><img
+                                        th:src="${post.image}"
                                         alt="post" width="500"
                                         style="border-radius: 10px; border: 1px solid #DBDBDB"></a>
                             </div>

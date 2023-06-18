@@ -64,19 +64,18 @@ public class ProfileController {
     @PreAuthorize("isAuthenticated()")
     @PostMapping(value = "/change/password")
     public String toUpdatePassword(
-            @RequestParam(name = "oldPassword") String oldPassword,
-            @RequestParam(name = "NewPassword") String newPassword,
-            @RequestParam(name = "reNewPassword") String repeatNewPassword) {
-
+            @RequestParam(name = "old_password") String oldPassword,
+            @RequestParam(name = "new_password") String newPassword,
+            @RequestParam(name = "renew_password") String repeatNewPassword) {
         if (newPassword.equals(repeatNewPassword)) {
             User user = userService.updatePassword(newPassword, oldPassword);
             if (user != null) {
-                return "redirect:/profile";
+                return "redirect:/profile/"+user.getUsername()+"?password-changed";
             } else {
-                return "redirect:/update-password-page?oldpassworderror";
+                return "redirect:/profile/"+userService.getCurrentSessionUser().getUsername()+"?oldpassword-error";
             }
         } else {
-            return "redirect:/update-password-page?passwordmismatch";
+            return "redirect:/profile/"+userService.getCurrentSessionUser().getUsername()+"?password-mismatch";
         }
     }
 
