@@ -47,7 +47,6 @@ public class UserService implements UserDetailsService {
     }
 
     public User updatePassword(String newPassword, String oldPassword) {
-
         User currentUser = getCurrentSessionUser();
         if(passwordEncoder.matches(oldPassword, currentUser.getPassword())){
             currentUser.setPassword(passwordEncoder.encode(newPassword));

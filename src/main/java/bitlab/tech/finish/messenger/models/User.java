@@ -104,6 +104,6 @@ public class User extends BaseModel implements UserDetails  {
     @OneToMany(mappedBy = "toUser")
     private List<Chat> toChats;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Post> posts;
 }

@@ -17,9 +17,6 @@ import java.time.LocalDateTime;
 @Setter
 public class Post extends BaseModel {
 
-    @Column(name = "title")
-    private String message;
-
     @Column(name = "text", columnDefinition = "TEXT")
     private String text;
 

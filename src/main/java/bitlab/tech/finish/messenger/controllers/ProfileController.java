@@ -1,4 +1,5 @@
 package bitlab.tech.finish.messenger.controllers;
+
 import bitlab.tech.finish.messenger.models.Post;
 import bitlab.tech.finish.messenger.models.User;
 import bitlab.tech.finish.messenger.services.FileStorageService;
@@ -23,6 +24,7 @@ public class ProfileController {
     private final UserService userService;
     private final PostService postService;
     private final FileStorageService fileStorageService;
+
     @PreAuthorize("isAuthenticated()") // this annotation checks if user is authenticated
     @GetMapping // this method will be called when user goes to /profile
     public String userProfile() {
@@ -47,7 +49,7 @@ public class ProfileController {
             user.setJob(job);
             user.setPhoneNumber(phone);
             user.setBio(about);
-            if (avatarFile != null) {
+            if (!avatarFile.isEmpty()) {
                 String fileName = fileStorageService.saveFile(avatarFile);
                 String filePath = "/images/" + fileName;
                 user.setAvatar(filePath);
@@ -55,21 +57,21 @@ public class ProfileController {
             userService.saveUser(user);
             return "redirect:/profile/" + user.getUsername();
         } catch (IOException e) {
-            return "redirect:/register?error";
+            return "redirect:/error?error";
         }
     }
+
     @PreAuthorize("isAuthenticated()")
     @PostMapping(value = "/change/password")
     public String toUpdatePassword(
-            @RequestParam(name = "user_old_password") String oldPassword,
-            @RequestParam(name = "user_new_password") String newPassword,
-            @RequestParam(name = "user_repeat_new_password") String repeatNewPassword) {
+            @RequestParam(name = "oldPassword") String oldPassword,
+            @RequestParam(name = "NewPassword") String newPassword,
+            @RequestParam(name = "reNewPassword") String repeatNewPassword) {
 
         if (newPassword.equals(repeatNewPassword)) {
-
             User user = userService.updatePassword(newPassword, oldPassword);
             if (user != null) {
-                return "redirect:/update-password-page?success";
+                return "redirect:/profile";
             } else {
                 return "redirect:/update-password-page?oldpassworderror";
             }
@@ -80,10 +82,23 @@ public class ProfileController {
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping(value = "/create/post")
-    public String toUpdateProfile(Post post) {
-        post.setUser(userService.getCurrentSessionUser());
-        postService.save(post);
-        return "redirect:/profile/"+userService.getCurrentSessionUser().getUsername()+"?post-created";
+    public String toUpdateProfile(
+            @RequestParam(name = "postText") String text,
+            @RequestParam(name = "postImage") MultipartFile image) {
+        try {
+            Post post = new Post();
+            post.setText(text);
+            if (!image.isEmpty()) {
+                String fileName = fileStorageService.saveFile(image);
+                String filePath = "/images/" + fileName;
+                post.setImage(filePath);
+            }
+            post.setUser(userService.getCurrentSessionUser());
+            postService.save(post);
+            return "redirect:/profile/" + userService.getCurrentSessionUser().getUsername() + "?post-created";
+        } catch (IOException e) {
+            return "redirect:/error?error";
+        }
     }
 
     @GetMapping(value = "{username}") //url is /profile/{username}
@@ -94,7 +109,7 @@ public class ProfileController {
         }
         User authUser = userService.getCurrentSessionUser();
         if (authUser != null && authUser.getId().equals(user.getId())) {
-            model.addAttribute("user", userService.getCurrentSessionUser());
+            model.addAttribute("user", user);
             return "profile"; // auth user to auth user profile
         } else if (authUser != null) {
             model.addAttribute("user", user);

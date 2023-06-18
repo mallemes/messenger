@@ -54,7 +54,8 @@
 
                                     <div class="row">
                                         <div class="col-lg-3 col-md-4 label ">Full Name</div>
-                                        <div class="col-lg-9 col-md-8" th:text="${user.firstName +' '+user.lastName}"></div>
+                                        <div class="col-lg-9 col-md-8"
+                                             th:text="${user.firstName +' '+user.lastName}"></div>
                                     </div>
 
                                     <div class="row">
@@ -76,17 +77,14 @@
                                 <div class="tab-pane fade profile-edit pt-3" id="profile-edit">
 
                                     <!-- Profile Edit Form -->
-                                    <form th:action="@{'/profile/update/user/data'}" method="post" enctype="multipart/form-data">
+                                    <form th:action="@{'/profile/update/user/data'}" method="post"
+                                          enctype="multipart/form-data">
                                         <div class="row mb-3">
                                             <label class="col-md-4 col-lg-3 col-form-label">Profile Image</label>
                                             <div class="col-md-8 col-lg-9">
                                                 <img th:src="${user.avatar}" alt="Profile">
                                                 <div class="pt-2">
                                                     <input type="file" name="avatarFile" class="form-control">
-<!--                                                    <a href="#" class="btn btn-primary btn-sm"-->
-<!--                                                       title="Upload new profile image"><i class="bi bi-upload"></i></a>-->
-<!--                                                    <a href="#" class="btn btn-danger btn-sm"-->
-<!--                                                       title="Remove my profile image"><i class="bi bi-trash"></i></a>-->
                                                 </div>
                                             </div>
                                         </div>
@@ -146,13 +144,13 @@
                                 </div>
                                 <div class="tab-pane fade pt-3" id="profile-change-password">
                                     <!-- Change Password Form -->
-                                    <form>
+                                    <form th:action="@{'/profile/change/password'}" method="post">
 
                                         <div class="row mb-3">
                                             <label for="currentPassword" class="col-md-4 col-lg-3 col-form-label">Current
                                                 Password</label>
                                             <div class="col-md-8 col-lg-9">
-                                                <input name="password" type="password" class="form-control"
+                                                <input name="oldPassword" type="password" class="form-control"
                                                        id="currentPassword">
                                             </div>
                                         </div>
@@ -161,16 +159,16 @@
                                             <label for="newPassword" class="col-md-4 col-lg-3 col-form-label">New
                                                 Password</label>
                                             <div class="col-md-8 col-lg-9">
-                                                <input name="newpassword" type="password" class="form-control"
+                                                <input name="newPassword" type="password" class="form-control"
                                                        id="newPassword">
                                             </div>
                                         </div>
 
                                         <div class="row mb-3">
-                                            <label for="renewPassword" class="col-md-4 col-lg-3 col-form-label">Re-enter
+                                            <label for="renewPassword" class="col-md-4 col-lg-3 col-form-label">Repeat
                                                 New Password</label>
                                             <div class="col-md-8 col-lg-9">
-                                                <input name="renewpassword" type="password" class="form-control"
+                                                <input name="reNewPassword" type="password" class="form-control"
                                                        id="renewPassword">
                                             </div>
                                         </div>
@@ -190,37 +188,36 @@
                 </div>
             </div>
         </section>
-
+        <!--start create user post form-->
         <div class="row justify-content-center">
             <div class="col-md-8">
-                <div class="card">
+                <form th:action="@{'/profile/create/post'}" class="card" method="post" enctype="multipart/form-data">
                     <div class="card-header d-flex">
                         <a href=""><img
                                 style="border: 1px solid #DBDBDB; border-radius: 50%"
                                 src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTDJzEaxLN-jGRYYUO65pWu7Q9GXoNt4LUSSA&usqp=CAU"
                                 alt="profile" width="50" height="50"></a>
-                        <input id="post-review" type="text" placeholder="What's on your mind?" class="form-control"
+                        <input id="post-review" type="text" name="postText" placeholder="What's on your mind?" class="form-control"
                                style="outline: none; padding: 10px; width: 90%">
                     </div>
                     <div id="post-image" style="text-align: center;">
                         <img src="#" id="post_image" alt="post" style="display: none">
                     </div>
-                    <form th:action="@{'/auth-profile/create/post'}" class="d-flex align-items-center justify-content-center"
-                          method="post" enctype="multipart/form-data" style="padding: 10px;">
+                    <div class="d-flex align-items-center justify-content-center" style="padding: 10px;">
                         <i id="post_image_button" class='bi bi-card-image' style="cursor:pointer;"></i>
-                        <input type="file" style="display: none" id="post_image_input" name="img"
+                        <input type="file" style="display: none" id="post_image_input" name="postImage"
                                onchange="readURL(this)"/>
                         <button type="submit" class="btn btn-primary" style="margin-left: 300px">send</button>
-                    </form>
-                </div>
+                    </div>
+                </form>
             </div>
             <!--      foreach loop      -->
-            <div class="col-md-8">
+            <div class="col-md-8" th:each="post: ${user.posts}">
                 <div class="card">
                     <div class="card-header">
                         <div class="d-flex">
-                            <a href="{{route('profile.show', $post->user)}}"><img
-                                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTDJzEaxLN-jGRYYUO65pWu7Q9GXoNt4LUSSA&usqp=CAU"
+                            <a th:href="@{'/profile/' + ${user.username}}"><img
+                                    th:src="${user.avatar}"
                                     alt="profile" width="50"
                                     class="rounded-circle"
                                     style="border: 1px solid #DBDBDB"></a>
@@ -229,11 +226,11 @@
                                aria-expanded="false"></i>
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item"
-                                       href="{{route('posts.complain.form', $post->id)}}">complain</a></li>
+                                       href="#">complain</a></li>
                                 <li><a class="dropdown-item" href="#">share</a></li>
-                                <li><a class="dropdown-item" href="{{route('posts.edit', $post->id)}}">edit</a></li>
+                                <li><a class="dropdown-item" href="#">edit</a></li>
                                 <li>
-                                    <form action="{{route('posts.destroy', $post->id)}}" method="post">
+                                    <form action="#" method="post">
 
                                         <a href="#" class="dropdown-item">
                                             <button type="submit" class="border-0 bg-transparent">
@@ -243,22 +240,22 @@
                                     </form>
                                 </li>
                             </ul>
-                            <span><a href="{{route('profile.show', $post->user)}}"
+                            <span><a href="#"
                                      style="margin-left: 15px; margin-top: 5px; color: black">user full name
                                             <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Twitter_Verified_Badge.svg/1200px-Twitter_Verified_Badge.svg.png"
                                                  alt="" width="15" style="margin-bottom: 1px;">
                                     <span style="color:gray;"></span></a>
                             <br>
-                            <span style="font-size: 14px; color: gray; margin-left: 15px">23.2.2021</span>
+                            <span style="font-size: 14px; color: gray; margin-left: 15px" th:text="${post.createdAt}"></span>
                         </span>
                         </div>
                         <a href="#">
                             <div style="margin-left: 55px; margin-bottom: 10px; margin-top: 5px;">
-                                <p style="color: black">message</p>
+                                <p style="color: black" th:text="${post.text}"></p>
                             </div>
-                            <div style="text-align: center; padding-bottom: 20px">
-                                <a href="{{route('posts.show', $post->id)}}"><img
-                                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTDJzEaxLN-jGRYYUO65pWu7Q9GXoNt4LUSSA&usqp=CAU"
+                            <div th:if="${post.image != null}" style="text-align: center; padding-bottom: 20px">
+                                <a href="#"><img
+                                        th:src="${post.image}"
                                         alt="post" width="500"
                                         style="border-radius: 10px; border: 1px solid #DBDBDB"></a>
                             </div>
