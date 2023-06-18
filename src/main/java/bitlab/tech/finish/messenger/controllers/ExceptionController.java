@@ -2,28 +2,28 @@ package bitlab.tech.finish.messenger.controllers;
 
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.http.HttpServletRequest;
-import org.hibernate.ObjectNotFoundException;
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ControllerAdvice;
-import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.ModelAndView;
 
-@ControllerAdvice
-public class ExceptionController {
+@Controller
+public class ExceptionController implements ErrorController {
 
-    @ExceptionHandler(ObjectNotFoundException.class)
-    public ModelAndView handleObjectNotFoundException() {
-        ModelAndView modelAndView = new ModelAndView("handlers/404-page");
-        modelAndView.setStatus(HttpStatus.NOT_FOUND);
-        return modelAndView;
+    @RequestMapping("/error")
+    public String handleError(HttpServletRequest request) {
+        Object status = request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE);
+
+        if (status != null) {
+            int statusCode = Integer.parseInt(status.toString());
+
+            if(statusCode == HttpStatus.NOT_FOUND.value()) {
+                return "handlers/404-page";
+            }
+            else if(statusCode == HttpStatus.INTERNAL_SERVER_ERROR.value()) {
+                return "handlers/500-page";
+            }
+        }
+        return "handlers/404-page";
     }
-
-//    @ExceptionHandler(Exception.class)
-//    public ModelAndView handleException() {
-//        ModelAndView modelAndView = new ModelAndView("handlers/500-page");
-//        modelAndView.setStatus(HttpStatus.E);
-//        return modelAndView;
-//    }
 }

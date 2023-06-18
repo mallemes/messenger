@@ -1,19 +1,17 @@
 package bitlab.tech.finish.messenger.controllers;
-
-
 import bitlab.tech.finish.messenger.models.Post;
 import bitlab.tech.finish.messenger.models.User;
 import bitlab.tech.finish.messenger.services.FileStorageService;
 import bitlab.tech.finish.messenger.services.PostService;
 import bitlab.tech.finish.messenger.services.UserService;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.ObjectNotFoundException;
-import org.springframework.boot.web.servlet.error.ErrorController;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.NoHandlerFoundException;
 
 import java.io.IOException;
 
@@ -89,10 +87,10 @@ public class ProfileController {
     }
 
     @GetMapping(value = "{username}") //url is /profile/{username}
-    public String profilePage(@PathVariable String username, Model model) {
+    public String profilePage(@PathVariable String username, Model model) throws NoHandlerFoundException {
         User user = userService.getUserByUsername(username);
-        if (user == null) {
-            throw new ObjectNotFoundException("User",User.class);
+        if (user == null) { // if user is not found in database redirect to 404 page
+            throw new NoHandlerFoundException("GET", "/profile/" + username, HttpHeaders.EMPTY);
         }
         User authUser = userService.getCurrentSessionUser();
         if (authUser != null && authUser.getId().equals(user.getId())) {
