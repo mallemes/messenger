@@ -106,4 +106,11 @@ public class User extends BaseModel implements UserDetails  {
 
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Post> posts;
+
+    public String loadUserAvatar(){  // if avatar is null or empty, return default avatar
+        if(avatar == null || avatar.isEmpty()){
+            return "/defaults/default-user.png";
+        }
+        return avatar;
+    }
 }

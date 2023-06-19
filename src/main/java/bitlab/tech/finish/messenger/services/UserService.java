@@ -1,6 +1,8 @@
 package bitlab.tech.finish.messenger.services;
 
+import bitlab.tech.finish.messenger.models.Chat;
 import bitlab.tech.finish.messenger.models.User;
+import bitlab.tech.finish.messenger.repositories.ChatRepository;
 import bitlab.tech.finish.messenger.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -11,10 +13,15 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.List;
+
 public class UserService implements UserDetailsService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private ChatRepository chatRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -61,6 +68,17 @@ public class UserService implements UserDetailsService {
             return (User) authentication.getPrincipal();
         }
         return null;
+    }
+
+    public List<Chat> userChat(User from, User to){
+        return chatRepository.findAllByFromUserAndToUserOrToUserAndFromUserOrderByCreatedAt(from, to , from, to);
+    }
+    public void sendMessage(User fromUser, User toUser, String message) {
+        Chat chat = new Chat();
+        chat.setFromUser(fromUser);
+        chat.setToUser(toUser);
+        chat.setMessage(message);
+        chatRepository.save(chat);
     }
 
 }

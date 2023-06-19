@@ -4,6 +4,7 @@ package bitlab.tech.finish.messenger.models;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.util.Date;
 
@@ -11,6 +12,7 @@ import java.util.Date;
 @Table(name = "t_user_chats")
 @Getter
 @Setter
+@ToString
 public class Chat extends BaseModel {
 
     @ManyToOne

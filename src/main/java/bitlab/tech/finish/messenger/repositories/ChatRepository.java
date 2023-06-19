@@ -6,14 +6,11 @@ import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-@Repository
+import java.util.List;
+
+
 @Transactional
-public interface UserRepository extends JpaRepository<User, Long> {
-
-    User findByEmail(String email);
-    User findByUsername(String username);
-
-    User findByUsernameOrEmail(String username, String email);
-
-
+@Repository
+public interface ChatRepository extends JpaRepository<Chat, Long> {
+    List<Chat> findAllByFromUserAndToUserOrToUserAndFromUserOrderByCreatedAt(User fromUser, User toUser, User fromUser2, User toUser2);
 }
