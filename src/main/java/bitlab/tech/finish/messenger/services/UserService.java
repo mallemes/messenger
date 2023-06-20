@@ -14,6 +14,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
+import java.util.Set;
 
 public class UserService implements UserDetailsService {
 
@@ -73,6 +74,8 @@ public class UserService implements UserDetailsService {
     public List<Chat> userChat(User from, User to){
         return chatRepository.findAllByFromUserAndToUserOrToUserAndFromUserOrderByCreatedAt(from, to , from, to);
     }
+
+
 
 
 }

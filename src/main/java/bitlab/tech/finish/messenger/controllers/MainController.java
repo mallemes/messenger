@@ -2,7 +2,9 @@ package bitlab.tech.finish.messenger.controllers;
 import bitlab.tech.finish.messenger.models.User;
 import bitlab.tech.finish.messenger.services.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -53,5 +55,26 @@ public class MainController {
         } else {
             return "redirect:/register?password_error";
         }
+    }
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping(value = "/friends")
+    public String friendsPage(Model model) {
+        User auth =userService.getUserByUsername(userService.getCurrentSessionUser().getUsername());
+        model.addAttribute("friends" , auth.getRelatedUsers());
+        return "auth_user_templates/friends";
+    }
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping(value = "/groups")
+    public String groupsPage() {
+        return "auth_user_templates/groups";
+    }
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping(value = "/friends/add")
+    public String addFriend(@RequestParam(name = "friend_username") String friendUsername) {
+        User auth =userService.getUserByUsername(userService.getCurrentSessionUser().getUsername());
+        User friend = userService.getUserByUsername(friendUsername);
+        auth.getRelatedUsers().add(friend);
+        userService.saveUser(auth);
+        return "redirect:/friends";
     }
 }

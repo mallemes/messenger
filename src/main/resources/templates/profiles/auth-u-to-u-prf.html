@@ -18,12 +18,15 @@
                             <h2 th:text="${user.username}"></h2>
                             <h3 th:text="${user.job != null ? user.job : 'not specified'}"></h3>
                             <div class="d-flex justify-content-around">
-                                <form action="">
-                                    <button class="btn link"><i style="font-size: 2rem" class="bi bi-person-plus"></i></button>
+                                <form th:action="@{'/friends/add'}" method="post">
+                                    <input type="hidden" th:value="${user.username}" name="friend_username">
+                                    <button class="btn link">
+                                        <i style="font-size: 2rem" class="bi bi-person-plus"></i></button>
                                 </form>
-                                <form action="">
-                                    <button class="btn link"><i style="font-size: 2rem" class="bi bi-chat-right"></i></button>
-                                </form>
+                                <div >
+                                    <a th:href="@{'/chat/' + ${user.username}}" class="btn link">
+                                        <i style="font-size: 2rem" class="bi bi-chat-right"></i></a>
+                                </div>
                             </div>
 
                         </div>
