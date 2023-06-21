@@ -18,17 +18,50 @@
                             <h2 th:text="${user.username}"></h2>
                             <h3 th:text="${user.job != null ? user.job : 'not specified'}"></h3>
                             <div class="d-flex justify-content-around">
-                                <form th:action="@{'/friends/add'}" method="post">
+                                <form th:action="@{'/friends/add'}" method="post"
+                                      style="margin-top: 0.825rem; width: 33%" th:if="${isFriend == true}">
                                     <input type="hidden" th:value="${user.username}" name="friend_username">
-                                    <button class="btn link">
-                                        <i style="font-size: 2rem" class="bi bi-person-plus"></i></button>
+                                    <button class="btn btn-success btn-sm">add</button>
                                 </form>
-                                <div >
+                                <form th:action="@{'/friends/remove'}" method="post"
+                                      style="margin-top: 0.825rem; width: 33%" th:if="${isFriend == false}">
+                                    <input type="hidden" th:value="${user.username}" name="friend_username">
+                                    <button class="btn btn-danger btn-sm"> remove</button>
+                                </form>
+                                <div style="width: 33%">
                                     <a th:href="@{'/chat/' + ${user.username}}" class="btn link">
-                                        <i style="font-size: 2rem" class="bi bi-chat-right"></i></a>
+                                        <i style="font-size: 2rem" class="bi bi-chat-right"></i> </a>
                                 </div>
-                            </div>
+                                <div class="dropdown pe-3" style="width: 33%;">
+                                    <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#"  style="margin-top: 0.625rem; " data-bs-toggle="dropdown">
+                                        <span class="d-none d-md-block dropdown-toggle ps-2">more</span>
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
+                                        <li class="dropdown-header">
+                                            <h6>More</h6>
+                                        </li>
+                                        <li>
+                                            <hr class="dropdown-divider">
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item d-flex align-items-center" href="">
+                                                <i class="bi bi-question-circle"></i>
+                                                <span>Friends</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <hr class="dropdown-divider">
+                                        </li>
 
+                                        <li>
+                                            <a class="dropdown-item d-flex align-items-center" href="#">
+                                                <i class="bi bi-box-arrow-right"></i>
+                                                <span>Groups</span>
+                                            </a>
+                                        </li>
+                                    </ul><!-- End Profile Dropdown Items -->
+                                </div><!-- End Profile Nav -->
+                            </div>
                         </div>
                     </div>
 
@@ -109,7 +142,8 @@
                                                  alt="" width="15" style="margin-bottom: 1px;">
                                     <span style="color:gray;"></span></a>
                             <br>
-                            <span style="font-size: 14px; color: gray; margin-left: 15px" th:text="${post.createdAt}"></span>
+                            <span style="font-size: 14px; color: gray; margin-left: 15px"
+                                  th:text="${post.createdAt}"></span>
                         </span>
                         </div>
                         <a href="#">

@@ -90,7 +90,7 @@ public class User extends BaseModel implements UserDetails  {
         return true;
     }
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "t_friends", // Название таблицы связи
             joinColumns = @JoinColumn(name = "user_id"), // Колонка, связанная с текущим пользователем

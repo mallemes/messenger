@@ -9,14 +9,19 @@
             <h5 class="card-title">Friends</h5>
             <!-- List group  -->
             <div class="list-group">
-                <div  th:each="friend:${friends}">
-                    <a th:href="@{'/profile/'+${friend.username}}" class="list-group-item list-group-item-action" aria-current="true">
-                        <div class="d-flex w-100 justify-content-between">
-                            <h5 class="mb-1" th:text="${friend.username}"></h5>
-                            <small>3 days ago</small>
+                <div  th:each="friend:${friends}" class="d-flex mt-2">
+                    <a th:href="@{'/profile/'+${friend.username}}" class="list-group-item list-group-item-action d-flex" aria-current="true">
+                        <div  style="width: 20%">
+                            <img th:src="${friend.loadUserAvatar()}" style="border-radius: 50px" alt="..." width="100" height="100">
                         </div>
-                        <p class="mb-1">Some placeholder content in a paragraph.</p>
-                        <small>And some small print.</small>
+                        <div style="width: 80%">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h5 class="mb-1" th:text="${friend.username}"></h5>
+                                <small>3 days ago</small>
+                            </div>
+                            <p class="mb-1">Some placeholder content in a paragraph.</p>
+                        </div>
+
                     </a>
                 </div>
 

@@ -70,12 +70,12 @@ public class ProfileController {
         if (newPassword.equals(repeatNewPassword)) {
             User user = userService.updatePassword(newPassword, oldPassword);
             if (user != null) {
-                return "redirect:/profile/"+user.getUsername()+"?password-changed";
+                return "redirect:/profile/" + user.getUsername() + "?password-changed";
             } else {
-                return "redirect:/profile/"+userService.getCurrentSessionUser().getUsername()+"?oldpassword-error";
+                return "redirect:/profile/" + userService.getCurrentSessionUser().getUsername() + "?oldpassword-error";
             }
         } else {
-            return "redirect:/profile/"+userService.getCurrentSessionUser().getUsername()+"?password-mismatch";
+            return "redirect:/profile/" + userService.getCurrentSessionUser().getUsername() + "?password-mismatch";
         }
     }
 
@@ -108,15 +108,20 @@ public class ProfileController {
         }
         User authUser = userService.getCurrentSessionUser();
         if (authUser != null && authUser.getId().equals(user.getId())) {
+
             model.addAttribute("user", user);
             return "profile"; // auth user to auth user profile
         } else if (authUser != null) {
+            User authUser2 = userService.getUserByUsername(authUser.getUsername());
+            boolean isFriend = authUser2.getRelatedUsers().stream()
+                    .anyMatch(relatedUser -> relatedUser.getId().equals(user.getId())); // check if auth user is friend with user
             model.addAttribute("user", user);
+            model.addAttribute("isFriend", !isFriend); // if auth user is friend with user then isFriend = false
             return "profiles/auth-u-to-u-prf"; // auth user to user profile
-        } else {
-            model.addAttribute("user", user);
-            return "profiles/anon-u-to-u-prf"; // anon user to user profile
         }
+        model.addAttribute("user", user);
+        return "profiles/anon-u-to-u-prf"; // anon user to user profile
+
 
     }
 

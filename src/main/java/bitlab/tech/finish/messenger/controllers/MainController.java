@@ -77,4 +77,13 @@ public class MainController {
         userService.saveUser(auth);
         return "redirect:/friends";
     }
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping(value = "/friends/remove")
+    public String removeFriend(@RequestParam(name = "friend_username") String friendUsername) {
+        User auth =userService.getUserByUsername(userService.getCurrentSessionUser().getUsername());
+        User friend = userService.getUserByUsername(friendUsername);
+        auth.getRelatedUsers().remove(friend);
+        userService.saveUser(auth);
+        return "redirect:/friends";
+    }
 }
