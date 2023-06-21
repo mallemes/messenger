@@ -113,4 +113,16 @@ public class User extends BaseModel implements UserDetails  {
         }
         return avatar;
     }
+    public String getFullName(){
+        if (firstName != null && lastName != null)
+             return firstName + " " + lastName;
+        else if (firstName != null)
+            return firstName;
+        else if (lastName != null)
+            return lastName;
+        else
+            return username;
+    }
+
+
 }

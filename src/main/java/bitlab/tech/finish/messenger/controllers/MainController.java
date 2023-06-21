@@ -2,12 +2,15 @@ package bitlab.tech.finish.messenger.controllers;
 import bitlab.tech.finish.messenger.models.User;
 import bitlab.tech.finish.messenger.services.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.NoHandlerFoundException;
 
 @Controller
 @RequiredArgsConstructor
@@ -56,16 +59,20 @@ public class MainController {
             return "redirect:/register?password_error";
         }
     }
-    @PreAuthorize("isAuthenticated()")
-    @GetMapping(value = "/friends")
-    public String friendsPage(Model model) {
-        User auth =userService.getUserByUsername(userService.getCurrentSessionUser().getUsername());
-        model.addAttribute("friends" , auth.getRelatedUsers());
+
+    @GetMapping(value = "/friends/{username}") // friends page for user
+    public String friendsPage(@PathVariable String username,  Model model) throws NoHandlerFoundException {
+        User currentUser =userService.getUserByUsername(username);
+        if (currentUser == null)
+            throw new NoHandlerFoundException("GET", "/friends/" + username, HttpHeaders.EMPTY);
+        model.addAttribute("friends" , currentUser.getRelatedUsers());
+        model.addAttribute("currentUser" , currentUser);
         return "auth_user_templates/friends";
     }
-    @PreAuthorize("isAuthenticated()")
-    @GetMapping(value = "/groups")
-    public String groupsPage() {
+
+    @GetMapping(value = "/groups/{username}") // groups page for user
+    public String groupsPage(@PathVariable String username, Model model) throws NoHandlerFoundException {
+
         return "auth_user_templates/groups";
     }
     @PreAuthorize("isAuthenticated()")
@@ -75,7 +82,7 @@ public class MainController {
         User friend = userService.getUserByUsername(friendUsername);
         auth.getRelatedUsers().add(friend);
         userService.saveUser(auth);
-        return "redirect:/friends";
+        return "redirect:/profile/"+friendUsername;
     }
     @PreAuthorize("isAuthenticated()")
     @PostMapping(value = "/friends/remove")
@@ -84,6 +91,6 @@ public class MainController {
         User friend = userService.getUserByUsername(friendUsername);
         auth.getRelatedUsers().remove(friend);
         userService.saveUser(auth);
-        return "redirect:/friends";
+        return "redirect:/profile/"+friendUsername;
     }
 }

@@ -14,7 +14,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
-import java.util.Set;
 
 public class UserService implements UserDetailsService {
 
@@ -41,7 +40,7 @@ public class UserService implements UserDetailsService {
         return userRepository.save(user);
     }
 
-    public User getUserByUsername(String username){
+    public User getUserByUsername(String username) {
         return userRepository.findByUsername(username);
     }
 
@@ -56,7 +55,7 @@ public class UserService implements UserDetailsService {
 
     public User updatePassword(String newPassword, String oldPassword) {
         User currentUser = getCurrentSessionUser();
-        if(passwordEncoder.matches(oldPassword, currentUser.getPassword())){
+        if (passwordEncoder.matches(oldPassword, currentUser.getPassword())) {
             currentUser.setPassword(passwordEncoder.encode(newPassword));
             return userRepository.save(currentUser);
         }
@@ -71,11 +70,16 @@ public class UserService implements UserDetailsService {
         return null;
     }
 
-    public List<Chat> userChat(User from, User to){
-        return chatRepository.findAllByFromUserAndToUserOrToUserAndFromUserOrderByCreatedAt(from, to , from, to);
+    public List<Chat> userChat(User from, User to) {
+        return chatRepository.findAllByFromUserAndToUserOrToUserAndFromUserOrderByCreatedAt(from, to, from, to);
     }
 
-
+    public List<User> searchUsers(String query) {
+        query = "%" + query + "%";
+        return userRepository
+                .findAllByUsernameContainingIgnoreCaseOrLastNameContainingIgnoreCaseOrFirstNameContainingIgnoreCase(
+                        query, query, query);
+    }
 
 
 }
