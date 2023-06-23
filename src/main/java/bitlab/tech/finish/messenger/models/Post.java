@@ -25,4 +25,5 @@ public class Post extends BaseModel {
 
     @ManyToOne
     private User user;
+
 }

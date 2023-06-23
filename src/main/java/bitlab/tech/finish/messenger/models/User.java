@@ -3,7 +3,6 @@ package bitlab.tech.finish.messenger.models;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -17,6 +16,7 @@ import java.util.Set;
 @Table(name = "t_users")
 @Getter
 @Setter
+
 public class User extends BaseModel implements UserDetails  {
 
 
@@ -106,6 +106,9 @@ public class User extends BaseModel implements UserDetails  {
 
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Post> posts;
+
+
+
 
     public String loadUserAvatar(){  // if avatar is null or empty, return default avatar
         if(avatar == null || avatar.isEmpty()){

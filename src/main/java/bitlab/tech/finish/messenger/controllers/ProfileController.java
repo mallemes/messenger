@@ -5,7 +5,9 @@ import bitlab.tech.finish.messenger.models.User;
 import bitlab.tech.finish.messenger.services.FileStorageService;
 import bitlab.tech.finish.messenger.services.PostService;
 import bitlab.tech.finish.messenger.services.UserService;
+import com.fasterxml.jackson.databind.deser.SettableAnyProperty;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -20,6 +22,12 @@ import java.io.IOException;
 @RequestMapping(value = "/profile")
 @RequiredArgsConstructor
 public class ProfileController {
+
+    @Value("${users.images.path}")
+    private String userImagesPath;  // get path from application.properties
+
+    @Value("${posts.images.path}")
+    private String postsImagesPath;  // get path from application.properties
 
     private final UserService userService;
     private final PostService postService;
@@ -50,9 +58,8 @@ public class ProfileController {
             user.setPhoneNumber(phone);
             user.setBio(about);
             if (!avatarFile.isEmpty()) {
-                String fileName = fileStorageService.saveFile(avatarFile);
-                String filePath = "/images/" + fileName;
-                user.setAvatar(filePath);
+                String fileName = fileStorageService.saveFile(avatarFile, userImagesPath);
+                user.setAvatar(fileName);
             }
             userService.saveUser(user);
             return "redirect:/profile/" + user.getUsername();
@@ -88,9 +95,8 @@ public class ProfileController {
             Post post = new Post();
             post.setText(text);
             if (!image.isEmpty()) {
-                String fileName = fileStorageService.saveFile(image);
-                String filePath = "/images/" + fileName;
-                post.setImage(filePath);
+                String fileName = fileStorageService.saveFile(image, postsImagesPath); // save file to /resources/static/storage/posts
+                post.setImage(fileName);
             }
             post.setUser(userService.getCurrentSessionUser());
             postService.save(post);
