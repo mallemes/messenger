@@ -7,10 +7,10 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="card w-100 border-0 p-0 bg-white shadow-xss rounded-xxl">
-                <div class="card-body h250 p-0 rounded-xxl overflow-hidden m-3"><img src="images/u-bg.jpg" alt="image"></div>
+                <div class="card-body h250 p-0 rounded-xxl overflow-hidden m-3"><img th:src="${group.loadImage()}" alt="image"></div>
                 <div class="card-body p-0 position-relative">
-                    <figure class="avatar position-absolute w100 z-index-1" style="top:-40px; left: 30px;"><img src="images/user-12.png" alt="image" class="float-right p-1 bg-white rounded-circle w-100"></figure>
-                    <h4 class="fw-700 font-sm mt-2 mb-lg-5 mb-4 pl-15">Mohannad Zitoun <span class="fw-500 font-xssss text-grey-500 mt-1 mb-3 d-block">support@gmail.com</span></h4>
+                    <figure class="avatar position-absolute w100 z-index-1" style="top:-40px; left: 30px;"><img th:src="${group.loadImage()}" alt="image" class="float-right p-1 bg-white rounded-circle w-100"></figure>
+                    <h4 class="fw-700 font-sm mt-2 mb-lg-5 mb-4 pl-15" th:text="${group.name}"> <span class="fw-500 font-xssss text-grey-500 mt-1 mb-3 d-block">support@gmail.com</span></h4>
                     <div class="d-flex align-items-center justify-content-center position-absolute-md right-15 top-0 me-2">
                         <a href="#" class="d-none d-lg-block bg-success p-3 z-index-1 rounded-3 text-white font-xsssss text-uppercase fw-700 ls-3">Add Friend</a>
                         <a href="#" class="d-none d-lg-block bg-greylight btn-round-lg ms-2 rounded-3 text-grey-700"><i class="feather-mail font-md"></i></a>
@@ -52,7 +52,7 @@
     </div>
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <form th:action="@{'/profile/create/post'}" class="card" method="post" enctype="multipart/form-data">
+            <form th:action="@{'/profile/create/group/post'}" class="card" method="post" enctype="multipart/form-data">
                 <div class="card-header d-flex">
                     <a href=""><img
                             style="border: 1px solid #DBDBDB; border-radius: 50%"
@@ -73,78 +73,77 @@
             </form>
         </div>
         <!--      foreach loop      -->
-<!--        <div class="col-md-8" th:each="post: ${user.posts}">-->
-<!--            <div class="card">-->
-<!--                <div class="card-header">-->
-<!--                    <div class="d-flex">-->
-<!--                        <a th:href="@{'/profile/' + ${user.username}}"><img-->
-<!--                                th:src="${user.avatar}"-->
-<!--                                alt="profile" width="50"-->
-<!--                                class="rounded-circle"-->
-<!--                                style="border: 1px solid #DBDBDB"></a>-->
-<!--                        <i class="bi bi-three-dots-vertical"-->
-<!--                           style="position: absolute; right: 25px; cursor:pointer;" data-bs-toggle="dropdown"-->
-<!--                           aria-expanded="false"></i>-->
-<!--                        <ul class="dropdown-menu">-->
-<!--                            <li><a class="dropdown-item"-->
-<!--                                   href="#">complain</a></li>-->
-<!--                            <li><a class="dropdown-item" href="#">share</a></li>-->
-<!--                            <li><a class="dropdown-item" href="#">edit</a></li>-->
-<!--                            <li>-->
-<!--                                <form action="#" method="post">-->
+        <div class="col-md-8" th:each="group: ${groups}">
+            <div class="card">
+                <div class="card-header">
+                    <div class="d-flex">
+                        <a th:href="@{'/profile/' + ${group.name}}"><img
+                                th:src="${group.image}"
+                                alt="profile" width="50"
+                                class="rounded-circle"
+                                style="border: 1px solid #DBDBDB"></a>
+                        <i class="bi bi-three-dots-vertical"
+                           style="position: absolute; right: 25px; cursor:pointer;" data-bs-toggle="dropdown"
+                           aria-expanded="false"></i>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item"
+                                   href="#">complain</a></li>
+                            <li><a class="dropdown-item" href="#">share</a></li>
+                            <li><a class="dropdown-item" href="#">edit</a></li>
+                            <li>
+                                <form action="#" method="post">
 
-<!--                                    <a href="#" class="dropdown-item">-->
-<!--                                        <button type="submit" class="border-0 bg-transparent">-->
-<!--                                            delete-->
-<!--                                        </button>-->
-<!--                                    </a>-->
-<!--                                </form>-->
-<!--                            </li>-->
-<!--                        </ul>-->
-<!--                        <span><a href="#"-->
-<!--                                 style="margin-left: 15px; margin-top: 5px; color: black">user full name-->
-<!--                                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Twitter_Verified_Badge.svg/1200px-Twitter_Verified_Badge.svg.png"-->
-<!--                                                 alt="" width="15" style="margin-bottom: 1px;">-->
-<!--                                    <span style="color:gray;"></span></a>-->
-<!--                            <br>-->
-<!--                            <span style="font-size: 14px; color: gray; margin-left: 15px" th:text="${post.createdAt}"></span>-->
-<!--                        </span>-->
-<!--                    </div>-->
-<!--                    <a href="#">-->
-<!--                        <div style="margin-left: 55px; margin-bottom: 10px; margin-top: 5px;">-->
-<!--                            <p style="color: black" th:text="${post.text}"></p>-->
-<!--                        </div>-->
-<!--                        <div th:if="${post.image != null}" style="text-align: center; padding-bottom: 20px">-->
-<!--                            <a href="#"><img-->
-<!--                                    th:src="${post.image}"-->
-<!--                                    alt="post" width="500"-->
-<!--                                    style="border-radius: 10px; border: 1px solid #DBDBDB"></a>-->
-<!--                        </div>-->
-<!--                    </a>-->
-<!--                    <div class="post-btns" style="width: 510px; margin-left: auto; margin-right: auto;">-->
-<!--                        <div style="float: left; display: flex">-->
-<!--                            <form action="{{route('posts.rate', $post->id)}}" method="post">-->
+                                    <a href="#" class="dropdown-item">
+                                        <button type="submit" class="border-0 bg-transparent">
+                                            delete
+                                        </button>
+                                    </a>
+                                </form>
+                            </li>
+                        </ul>
+                        <span><a href="#"
+                                 style="margin-left: 15px; margin-top: 5px; color: black">user full name
+                                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Twitter_Verified_Badge.svg/1200px-Twitter_Verified_Badge.svg.png"
+                                                 alt="" width="15" style="margin-bottom: 1px;">
+                                    <span style="color:gray;"></span></a>
+                            <br>
+                            <span style="font-size: 14px; color: gray; margin-left: 15px" th:text="${group.createdAt}"></span>
+                        </span>
+                    </div>
+                    <a href="#">
+                        <div style="margin-left: 55px; margin-bottom: 10px; margin-top: 5px;">
+                            <p style="color: black" th:text="${post.text}"></p>
+                        </div>
+                        <div th:if="${post.image != null}" style="text-align: center; padding-bottom: 20px">
+                            <a href="#"><img
+                                    th:src="${post.image}"
+                                    alt="post" width="500"
+                                    style="border-radius: 10px; border: 1px solid #DBDBDB"></a>
+                        </div>
+                    </a>
+                    <div class="post-btns" style="width: 510px; margin-left: auto; margin-right: auto;">
+                        <div style="float: left; display: flex">
+                            <form action="{{route('posts.rate', $post->id)}}" method="post">
 
-<!--                                <button style="font-size: 12px; color:gray" class="bg-transparent border-0"-->
-<!--                                        type="submit">like-->
-<!--                                </button>-->
-<!--                            </form>-->
-<!--                            <form action="">-->
-<!--                                <button style="font-size: 12px; color: gray" class="bg-transparent border-0"><a-->
-<!--                                        style="color: gray"-->
-<!--                                        href="{{route('posts.show', $post->id)}}">comment</a></button>-->
-<!--                            </form>-->
-<!--                        </div>-->
-<!--                        <div class="post-count" style="float: right">-->
-<!--                            <span style="font-size: 12px; color: gray">123 likes</span>-->
-<!--                            <span style="font-size: 12px; color: gray; margin-left: 10px">324 comments</span>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
+                                <button style="font-size: 12px; color:gray" class="bg-transparent border-0"
+                                        type="submit">like
+                                </button>
+                            </form>
+                            <form action="">
+                                <button style="font-size: 12px; color: gray" class="bg-transparent border-0"><a
+                                        style="color: gray"
+                                        href="{{route('posts.show', $post->id)}}">comment</a></button>
+                            </form>
+                        </div>
+                        <div class="post-count" style="float: right">
+                            <span style="font-size: 12px; color: gray">123 likes</span>
+                            <span style="font-size: 12px; color: gray; margin-left: 10px">324 comments</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-
 </div>
 
 

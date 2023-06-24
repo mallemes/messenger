@@ -1,12 +1,15 @@
-package bitlab.tech.finish.messenger.models.group;
+package bitlab.tech.finish.messenger.models.group_p;
 
 
 import bitlab.tech.finish.messenger.models.BaseModel;
 import bitlab.tech.finish.messenger.models.User;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "t_groups")
+@Table(name = "t_comments")
 public class Comment extends BaseModel {
 
     @Column(name = "text")
@@ -16,6 +19,6 @@ public class Comment extends BaseModel {
     private User author;
 
     @ManyToOne
-    private GroupPost post;
+    private GPost post;
 
 }

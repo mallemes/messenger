@@ -7,24 +7,24 @@
     <div class="card">
         <div class="card-body">
             <h5 th:if="${globalAuthUser != null && globalAuthUser.id == currentUser.id}" class="card-title">Your
-                friends</h5>
+                groups</h5>
             <h5 th:if="${globalAuthUser == null || globalAuthUser.id != currentUser.id}" class="card-title"
-                th:text="'Friends for '+${currentUser.username}"></h5>
+                th:text="'Groups for '+${currentUser.username}"></h5>
             <!-- List group  -->
             <div class="list-group">
-                <div th:each="friend:${friends}" class="d-flex mt-2">
-                    <a th:href="@{'/profile/'+${friend.username}}" class="list-group-item list-group-item-action d-flex"
+                <div th:each="group:${groups}" class="d-flex mt-2">
+                    <a th:href="@{'/groups/show/'+${group.slug}}" class="list-group-item list-group-item-action d-flex"
                        aria-current="true">
                         <div style="width: 20%">
-                            <img th:src="${friend.loadUserAvatar()}" style="border-radius: 50px" alt="..." width="100"
+                            <img th:src="${group.image}" style="border-radius: 50px" alt="..." width="100"
                                  height="100">
                         </div>
                         <div style="width: 80%">
                             <div class="d-flex w-100 justify-content-between">
-                                <h5 class="mb-1" th:text="${friend.username}"></h5>
-                                <small>3 days ago</small>
+                                <h5 class="mb-1" th:text="${group.name}"></h5>
+                                <small th:text="${group.getCreatedAtFormatted()}"></small>
                             </div>
-                            <p class="mb-1" th:text="'Full name is: '+${friend.getFullName()}"></p>
+                            <p class="mb-1" th:text="'status: '+${group.status}"></p>
                         </div>
 
                     </a>

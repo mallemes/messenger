@@ -26,4 +26,9 @@ public class BaseModel {
         this.createdAt = LocalDateTime.now();
     }
 
+
+    public String getCreatedAtFormatted() {
+        return createdAt.getDayOfMonth() + "." + createdAt.getMonthValue() + "." + createdAt.getYear();
+    }
+
 }

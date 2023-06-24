@@ -1,4 +1,4 @@
-package bitlab.tech.finish.messenger.models.group;
+package bitlab.tech.finish.messenger.models.group_p;
 
 import bitlab.tech.finish.messenger.models.BaseModel;
 import bitlab.tech.finish.messenger.models.User;
@@ -8,7 +8,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "t_group_posts")
-public class GroupPost extends BaseModel {
+public class GPost extends BaseModel {
 
     @Column(name = "text")
     private String text;

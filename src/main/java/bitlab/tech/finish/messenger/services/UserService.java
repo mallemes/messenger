@@ -75,9 +75,8 @@ public class UserService implements UserDetailsService {
     }
 
     public List<User> searchUsers(String query) {
-        query = "%" + query + "%";
         return userRepository
-                .findAllByUsernameContainingIgnoreCaseOrLastNameContainingIgnoreCaseOrFirstNameContainingIgnoreCase(
+                .searchAllByUsernameContainingIgnoreCaseOrLastNameContainingIgnoreCaseOrFirstNameContainingIgnoreCase(
                         query, query, query);
     }
 

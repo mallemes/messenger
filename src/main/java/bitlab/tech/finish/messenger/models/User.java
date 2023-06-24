@@ -1,5 +1,6 @@
 package bitlab.tech.finish.messenger.models;
 
+import bitlab.tech.finish.messenger.models.group_p.Group;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -52,9 +53,43 @@ public class User extends BaseModel implements UserDetails  {
 
 
 
+
+
+
+
+    //relations
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "t_friends", // name of the table
+            joinColumns = @JoinColumn(name = "user_id"), // column, joined with current user
+            inverseJoinColumns = @JoinColumn(name = "friend_id") // column, joined with friend
+    )
+    private Set<User> relatedUsers = new HashSet<>();
+
     @ManyToMany(fetch = FetchType.EAGER)
     private List<Permission> permissions;
 
+    @OneToMany(mappedBy = "fromUser")
+    private List<Chat> fromChats;
+
+    @OneToMany(mappedBy = "toUser")
+    private List<Chat> toChats;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private List<Post> posts;
+
+
+    @ManyToMany()
+    private List<Group> groups;
+
+
+    @OneToMany(mappedBy = "author")
+    private List<Group> createdGroups;
+
+
+
+    // UserDetails methods
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return this.permissions;
@@ -90,26 +125,7 @@ public class User extends BaseModel implements UserDetails  {
         return true;
     }
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "t_friends", // Название таблицы связи
-            joinColumns = @JoinColumn(name = "user_id"), // Колонка, связанная с текущим пользователем
-            inverseJoinColumns = @JoinColumn(name = "friend_id") // Колонка, связанная с связанным пользователем
-    )
-    private Set<User> relatedUsers = new HashSet<>();
-
-    @OneToMany(mappedBy = "fromUser")
-    private List<Chat> fromChats;
-
-    @OneToMany(mappedBy = "toUser")
-    private List<Chat> toChats;
-
-    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private List<Post> posts;
-
-
-
-
+    // custom methods
     public String loadUserAvatar(){  // if avatar is null or empty, return default avatar
         if(avatar == null || avatar.isEmpty()){
             return "/defaults/default-user.png";
@@ -126,6 +142,7 @@ public class User extends BaseModel implements UserDetails  {
         else
             return username;
     }
+
 
 
 }

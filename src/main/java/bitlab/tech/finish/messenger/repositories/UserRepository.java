@@ -22,6 +22,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Set<User> findAllByRelatedUsersContains(User user);
 
     List<User> searchAllByUsernameContainsOrFirstNameContainsOrLastNameContains(String username, String firstName, String lastName);
-    List<User> findAllByUsernameContainingIgnoreCaseOrLastNameContainingIgnoreCaseOrFirstNameContainingIgnoreCase(String username, String lastName, String firstName);
+    List<User> searchAllByUsernameContainingIgnoreCaseOrLastNameContainingIgnoreCaseOrFirstNameContainingIgnoreCase(String username, String lastName, String firstName);
 
 }
