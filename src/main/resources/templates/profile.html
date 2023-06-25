@@ -225,13 +225,11 @@
                                style="position: absolute; right: 25px; cursor:pointer;" data-bs-toggle="dropdown"
                                aria-expanded="false"></i>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item"
-                                       href="#">complain</a></li>
                                 <li><a class="dropdown-item" href="#">share</a></li>
                                 <li><a class="dropdown-item" href="#">edit</a></li>
                                 <li>
-                                    <form action="#" method="post">
-
+                                    <form th:action="@{'/profile/delete/post'}" method="post">
+                                        <input type="hidden" name="postId" th:value="${post.id}">
                                         <a href="#" class="dropdown-item">
                                             <button type="submit" class="border-0 bg-transparent">
                                                 delete

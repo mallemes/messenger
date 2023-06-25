@@ -3,11 +3,15 @@ package bitlab.tech.finish.messenger.models.group_p;
 import bitlab.tech.finish.messenger.models.BaseModel;
 import bitlab.tech.finish.messenger.models.User;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 
 @Entity
 @Table(name = "t_group_posts")
+@Getter
+@Setter
 public class GPost extends BaseModel {
 
     @Column(name = "text")
@@ -17,7 +21,7 @@ public class GPost extends BaseModel {
     private String image;
 
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     private User author;
 
     @ManyToOne

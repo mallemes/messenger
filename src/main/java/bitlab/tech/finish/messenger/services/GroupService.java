@@ -21,5 +21,8 @@ public class GroupService {
     public Group getGroupBySlug(String slug){
         return groupRepository.findBySlug(slug);
     }
+    public Group save(Group group){
+        return groupRepository.save(group);
+    }
 
 }

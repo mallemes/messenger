@@ -1,10 +1,13 @@
 package bitlab.tech.finish.messenger.controllers;
-
+import bitlab.tech.finish.messenger.models.Post;
 import bitlab.tech.finish.messenger.models.User;
-import bitlab.tech.finish.messenger.models.group_p.Group;
+import bitlab.tech.finish.messenger.models.group_p.GPost;
 import bitlab.tech.finish.messenger.services.GroupService;
+import bitlab.tech.finish.messenger.services.PostService;
 import bitlab.tech.finish.messenger.services.UserService;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.ListUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -15,15 +18,28 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
+import java.util.Collections;
+import java.util.List;
+
 @Controller
 @RequiredArgsConstructor
 public class MainController {
 
     private final UserService userService;
     private final GroupService groupService;
+    private final PostService postService;
 
     @GetMapping(value = "/") // index page
-    public String indexPage() {
+    public String indexPage(Model model) {
+       List<GPost>allPosts = postService.allGroupPosts();
+        if (CollectionUtils.isNotEmpty(allPosts)) {
+            // Перемешиваем список постов
+            Collections.shuffle(allPosts);
+            // Получаем первые 5 случайных постов
+            List<GPost> randomPosts = ListUtils.partition(allPosts, 5).get(0);
+            model.addAttribute("posts", randomPosts);
+        }
+
         return "index";
     }
 
@@ -64,6 +80,34 @@ public class MainController {
         }
     }
 
+    @GetMapping(value = "/search")
+    public String searchUsers(@RequestParam(name = "query", required = false) String query,
+                              @RequestParam(name = "users", required = false) String users,
+                              @RequestParam(name = "groups", required = false) String groups,
+                              Model model) {
+        if (query != null && !query.isEmpty()) {
+            model.addAttribute("users", userService.searchUsers(query));
+            model.addAttribute("groups", groupService.searchGroups(query));
+            model.addAttribute("query", query);
+            return "list_pages/search";
+        }
+        if ((users != null && !users.isEmpty()) && (groups != null && !groups.isEmpty())) {
+            model.addAttribute("users", userService.searchUsers(users));
+            model.addAttribute("groups", groupService.searchGroups(groups));
+            model.addAttribute("query", users + " " + groups);
+            return "list_pages/search";
+        }
+        if (groups != null && !groups.isEmpty()) {
+            model.addAttribute("groups", groupService.searchGroups(groups));
+            model.addAttribute("query", groups);
+            return "list_pages/search";
+        }
+        if (users != null && !users.isEmpty())
+            model.addAttribute("users", userService.searchUsers(users));
+        model.addAttribute("query", users);
+        return "list_pages/search";
+    }
+
     @GetMapping(value = "/friends/{username}") // friends page for user
     public String friendsPage(@PathVariable String username, Model model) throws NoHandlerFoundException {
         User currentUser = userService.getUserByUsername(username);
@@ -73,25 +117,6 @@ public class MainController {
         model.addAttribute("currentUser", currentUser);
         return "list_pages/friends";
     }
-
-    @GetMapping(value = "/groups/show/{slug}")
-    public String showGroup(@PathVariable String slug, Model model) throws NoHandlerFoundException {
-        Group group = groupService.getGroupBySlug(slug);
-        if (group== null)
-            throw new NoHandlerFoundException("GET", "/groups/show/" + slug, HttpHeaders.EMPTY);
-        model.addAttribute("group", group);
-        return "group/single-group";
-    }
-    @GetMapping(value = "/groups/{username}") // groups page for user
-    public String groupsPage(@PathVariable String username, Model model) throws NoHandlerFoundException {
-        User currentUser = userService.getUserByUsername(username);
-        if (currentUser == null)
-            throw new NoHandlerFoundException("GET", "/groups/" + username, HttpHeaders.EMPTY);
-        model.addAttribute("currentUser", currentUser);
-        model.addAttribute("groups", currentUser.getGroups());
-        return "group/groups";
-    }
-
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping(value = "/friends/add")
@@ -103,36 +128,6 @@ public class MainController {
         return "redirect:/profile/" + friendUsername;
     }
 
-    @GetMapping(value = "/search")
-    public String searchUsers(@RequestParam(name = "query", required = false) String query,
-                              @RequestParam(name = "users", required = false) String users,
-                              @RequestParam(name = "groups", required = false) String groups,
-                              Model model) {
-        if (query != null && !query.isEmpty()){
-            model.addAttribute("users", userService.searchUsers(query));
-            model.addAttribute("groups", groupService.searchGroups(query));
-            model.addAttribute("query", query);
-            return "list_pages/search";
-        }
-        if ( (users != null && !users.isEmpty()) && (groups != null && !groups.isEmpty())) {
-            model.addAttribute("users", userService.searchUsers(users));
-            model.addAttribute("groups", groupService.searchGroups(groups));
-            model.addAttribute("query", users + " " + groups);
-            return "list_pages/search";
-        }
-        if (groups != null && !groups.isEmpty()){
-            model.addAttribute("groups", groupService.searchGroups(groups));
-            model.addAttribute("query", groups);
-            return "list_pages/search";
-        }
-        if (users != null && !users.isEmpty())
-            model.addAttribute("users", userService.searchUsers(users));
-        model.addAttribute("query", users);
-        return "list_pages/search";
-    }
-
-
-
     @PreAuthorize("isAuthenticated()")
     @PostMapping(value = "/friends/remove")
     public String removeFriend(@RequestParam(name = "friend_username") String friendUsername) {
@@ -142,5 +137,4 @@ public class MainController {
         userService.saveUser(auth);
         return "redirect:/profile/" + friendUsername;
     }
-
 }

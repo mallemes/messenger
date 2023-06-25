@@ -16,7 +16,7 @@
                     <a th:href="@{'/groups/show/'+${group.slug}}" class="list-group-item list-group-item-action d-flex"
                        aria-current="true">
                         <div style="width: 20%">
-                            <img th:src="${group.image}" style="border-radius: 50px" alt="..." width="100"
+                            <img th:src="${group.loadImage()}" style="border-radius: 50px" alt="..." width="100"
                                  height="100">
                         </div>
                         <div style="width: 80%">

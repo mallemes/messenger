@@ -88,7 +88,7 @@ public class ProfileController {
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping(value = "/create/post")
-    public String toUpdateProfile(
+    public String createPost(
             @RequestParam(name = "postText") String text,
             @RequestParam(name = "postImage") MultipartFile image) {
         try {
@@ -129,6 +129,12 @@ public class ProfileController {
         return "profiles/anon-u-to-u-prf"; // anon user to user profile
 
 
+    }
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping(value = "/delete/post")
+    public String deletePost(@RequestParam(name = "postId") Long postId) {
+        postService.deletePostById(postId);
+        return "redirect:/profile/" + userService.getCurrentSessionUser().getUsername() + "?post-deleted";
     }
 
 }

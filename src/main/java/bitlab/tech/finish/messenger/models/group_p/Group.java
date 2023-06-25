@@ -31,7 +31,7 @@ public class Group extends BaseModel {
     @Column(name = "poster")
     private String image;
 
-    @OneToMany(mappedBy = "group", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "group", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<GPost> posts;
 
     @ManyToOne(fetch = FetchType.EAGER)
