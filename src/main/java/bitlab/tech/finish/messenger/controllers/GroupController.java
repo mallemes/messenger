@@ -19,6 +19,7 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.regex.Pattern;
 
 @Controller
 @RequestMapping(value = "/groups")
@@ -34,6 +35,7 @@ public class GroupController {
     private final GroupService groupService;
     private final FileStorageService fileStorageService;
     private final PostService postService;
+
     @GetMapping(value = "/show/{slug}")
     public String showGroup(@PathVariable String slug, Model model) throws NoHandlerFoundException {
         Group group = groupService.getGroupBySlug(slug);
@@ -74,19 +76,23 @@ public class GroupController {
         return "redirect:/groups/" + auth.getUsername();
     }
 
-    //    @PreAuthorize("isAuthenticated()")
-//    @PostMapping(value = "/create")
-//    public String createGroup(@RequestParam(name = "group_name") String groupName,
-//                              @RequestParam(name = "group_description") String groupDescription) {
-//        User auth = userService.getUserByUsername(userService.getCurrentSessionUser().getUsername());
-//        Group group = new Group();
-//        group.setName(groupName);
-//        group.setDescription(groupDescription);
-//        group.setSlug(groupName.toLowerCase().replaceAll(" ", "-"));
-//        group.setCreator(auth);
-//        groupService.saveGroup(group);
-//        return "redirect:/groups/" + auth.getUsername();
-//    }
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping(value = "/create")
+    public String createGroup(Group group,
+                              @RequestParam(name = "groupImage") MultipartFile image) throws IOException {
+        if (groupService.getGroupBySlug(group.getSlug()) != null)
+            return "redirect:/error?error";
+
+        String fileName = fileStorageService.saveFile(image, groupsImagesPath); // save file to /resources/static/storage/groups
+        group.setImage(fileName);
+        group.setAuthor(userService.getCurrentSessionUser());
+        Group g = groupService.save(group);
+        User auth = userService.getUserByUsername(userService.getCurrentSessionUser().getUsername());
+        auth.getGroups().add(g);
+        userService.saveUser(auth);
+        return "redirect:/groups/" + auth.getUsername();
+    }
+
     @PreAuthorize("isAuthenticated()")
     @PostMapping(value = "/create/post")
     public String createPost(
@@ -138,6 +144,7 @@ public class GroupController {
         groupService.save(group);
         return "redirect:/groups/show/" + slug + "?group-updated";
     }
+
     @PreAuthorize("isAuthenticated()")
     @PostMapping(value = "/delete/post")
     public String deletePost(@RequestParam(name = "postId") Long postId,
@@ -168,8 +175,6 @@ public class GroupController {
         model.addAttribute("groups", currentUser.getGroups());
         return "group/groups";
     }
-
-
 
 
 }

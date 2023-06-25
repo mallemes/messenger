@@ -80,7 +80,7 @@
                     </li>
 
                     <li>
-                        <a class="dropdown-item d-flex align-items-center" th:href="@{'profile/'+${globalAuthUser.username}}">
+                        <a class="dropdown-item d-flex align-items-center" th:href="@{'/profile'}">
                             <i class="bi bi-person"></i>
                             <span>My Profile</span>
                         </a>
@@ -99,13 +99,13 @@
                         <hr class="dropdown-divider">
                     </li>
                     <li>
-                        <hr class="dropdown-divider">
-                    </li>
-
-                    <li>
-                        <form th:action="@{'/logout'}" method="post">
+                        <form id="logoutForm" style="overflow: hidden" th:action="@{'/logout'}" method="post"></form>
+                        <button onclick="submitBtn()" style="border: none" class="dropdown-item d-flex align-items-center" href="">
                             <i class="bi bi-box-arrow-right"></i><span>Sign Out</span>
-                        </form>
+                        </button>
+                        <script>
+                            const submitBtn = () => document.getElementById("logoutForm").submit();
+                        </script>
                     </li>
 
                 </ul><!-- End Profile Dropdown Items -->
