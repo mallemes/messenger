@@ -5,60 +5,21 @@
 
 <div layout:fragment="content" class="mt-3">
     <div class="row">
-<!--        <div class="col-lg-3 position-relative">-->
-<!--            <ol class="list-group">-->
-<!--                <li class="list-group-item d-flex justify-content-between align-items-start active">-->
-<!--                    <div class="ms-2 me-auto">-->
-<!--                        <img width="30" height="30" style="border-radius: 30px" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTDJzEaxLN-jGRYYUO65pWu7Q9GXoNt4LUSSA&usqp=CAU" alt=".">-->
-<!--                        <a href="#" class="fw-bold" style="color: white">Subheading</a>-->
-<!--                    </div>-->
-<!--                </li>-->
-<!--                <li class="list-group-item d-flex justify-content-between align-items-start">-->
-<!--                    <div class="ms-2 me-auto">-->
-<!--                        <img width="30" height="30" style="border-radius: 30px" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTDJzEaxLN-jGRYYUO65pWu7Q9GXoNt4LUSSA&usqp=CAU" alt=".">-->
-<!--                        <a href="#" class="fw-bold" >Subheading</a>-->
-<!--                    </div>-->
-<!--                </li>-->
-<!--                <li class="list-group-item d-flex justify-content-between align-items-start">-->
-<!--                    <div class="ms-2 me-auto">-->
-<!--                        <img width="30" height="30" style="border-radius: 30px" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTDJzEaxLN-jGRYYUO65pWu7Q9GXoNt4LUSSA&usqp=CAU" alt=".">-->
-<!--                        <a href="#" class="fw-bold" >Subheading</a>-->
-<!--                    </div>-->
-<!--                </li>-->
-<!--            </ol>&lt;!&ndash; End with custom content &ndash;&gt;-->
-<!--        </div>-->
         <div class="col-lg-12 position-relative">
             <div class="chat-wrapper pt-0 w-100 position-relative scroll-bar bg-white theme-dark-bg">
                 <div class="chat-body p-3 ">
-                    <div class="messages-content pb-5" th:each="chat: ${chats}">
-                        <div class="message-item" th:if="${chat.toUser.id != toUser.id}">
-                            <div class="message-user" >
-                                <figure class="avatar d-flex">
-                                    <img th:src="${toUser.loadUserAvatar()}" alt="image">
-                                    <div  class="message-wrap" >
-                                        <span th:text="${chat.message}"></span>
-                                           <p class="time text-end">01:35 PM</p>
-                                    </div>
-                                </figure>
-                            </div>
-                        </div>
-                        <div class="message-item outgoing-message" th:if="${chat.toUser.id == toUser.id}">
-                            <div class="message-user">
-                                <div  class="message-wrap">
-                                    <span th:text="${chat.message}"></span>
-                                    <p class="time text-end">01:35 PM</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="clearfix"></div>
+                    <div id="messages-content" class="messages-content pb-5">
+                        <!--       load data           -->
                     </div>
                 </div>
             </div>
             <div class="chat-bottom dark-bg p-3 shadow-none theme-dark-bg" style="width: 98%;">
-                <form class="chat-form" method="post" th:action="@{'/chat/send/message/'+${toUser.username}}">
+                <form id="send_form" class="chat-form" method="post"
+                      th:action="@{'/api/v1/chat/send/message/'+${toUser.username}}">
                     <button class="bg-grey float-left"><i class="bi bi-image"></i></button>
                     <div class="form-group">
-                        <input class="form-control" name="message" style="color: black" type="text" placeholder="Start typing..">
+                        <input class="form-control" name="message" style="color: black" type="text"
+                               placeholder="Start typing..">
                     </div>
                     <button class="bg-current"><i class="bi bi-arrow-right-circle"></i></button>
                 </form>
@@ -66,6 +27,66 @@
         </div>
 
     </div>
+    <script>
+        $(document).ready(function () {
+            loadChats();
+            $('#send_form').submit(function (event) {
+                event.preventDefault(); // for prevent reload
+
+                let form = $(this);
+                let url = form.attr('action');
+                let message = form.find('input[name="message"]').val();
+
+                $.post(url, {message: message})
+                    .done(function (response) {
+                        // handle success
+                        loadChats();
+                        console.log("success send message");
+                    })
+                    .fail(function (xhr, status, error) {
+                        // handle error
+                        console.error(error);
+                    });
+            });
+        });
+        const loadChats = () =>{
+            let url = window.location.href; // Получаем текущий URL страницы
+            let segments = url.split("/"); // Разбиваем URL на сегменты по символу "/"
+            let username = segments[segments.length - 1]; // Получаем последний сегмент пути URL (в данном случае "John")
+            let messagesContent = $("#messages-content");
+            // Выполняем AJAX-запрос к REST API для получения сообщений
+            $.get("/api/v1/chat/" + username)
+                .done(function (response) {
+                    const chats = response.chats;
+                    let messagesData = "";
+                    for (let i = 0; i < chats.length; i++) {
+                        let chat = chats[i];
+                        let messageItemClass = (chat.toUser.id === response.currentUserId) ? "message-item" : "message-item outgoing-message";
+                        let avatarImageSrc = "https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png"
+
+                        let messageItemHtml = '<div class="' + messageItemClass + '">' +
+                            '<div class="message-user">' +
+                            '<figure class="avatar d-flex">' +
+                            '<img src="' + avatarImageSrc + '" alt="image">' +
+                            '<div class="message-wrap">' +
+                            '<span>' + chat.message + '</span>' +
+                            '<p class="time text-end">01:35 PM</p>' +
+                            '</div>' +
+                            '</figure>' +
+                            '</div>' +
+                            '</div>';
+                        messagesData += messageItemHtml;
+                    }
+                    //append response to messagesContent
+                    messagesContent.html(messagesData);
+                    // Прокручиваем контейнер в самый низ
+                    messagesContent.scrollTop(messagesContent.prop("scrollHeight"));
+                }).fail(function (xhr, status, error) {
+                // Обработка ошибки
+                console.error(error);
+            });
+        }
+    </script>
 </div>
 
 

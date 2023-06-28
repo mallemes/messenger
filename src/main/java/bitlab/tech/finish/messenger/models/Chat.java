@@ -1,6 +1,7 @@
 package bitlab.tech.finish.messenger.models;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,12 +16,14 @@ import java.util.Date;
 @ToString
 public class Chat extends BaseModel {
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "from_user_id")
+    @JsonIgnore
     private User fromUser;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "to_user_id")
+    @JsonIgnore
     private User toUser;
 
     @Column(name = "message", columnDefinition = "TEXT")

@@ -12,9 +12,14 @@ import java.util.List;
 public interface ChatMapper {
 
     @Mapping(source = "image", target = "file")
+    @Mapping(source = "fromUser", target = "fromUser")
+    @Mapping(source = "toUser", target = "toUser")
     ChatDTO toChatDTO(Chat chat);
 
     @Mapping(source = "file", target = "image")
+    @Mapping(source = "fromUser", target = "fromUser")
+    @Mapping(source = "toUser", target = "toUser")
+
     Chat toChat(ChatDTO chatDTO);
 
     List<ChatDTO> toChatDTOList(List<Chat> chats);

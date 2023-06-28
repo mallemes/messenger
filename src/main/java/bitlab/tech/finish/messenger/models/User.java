@@ -1,6 +1,7 @@
 package bitlab.tech.finish.messenger.models;
 
 import bitlab.tech.finish.messenger.models.group_p.Group;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -60,6 +61,7 @@ public class User extends BaseModel implements UserDetails  {
     //relations
 
     @ManyToMany(fetch = FetchType.EAGER)
+    @JsonIgnore
     @JoinTable(
             name = "t_friends", // name of the table
             joinColumns = @JoinColumn(name = "user_id"), // column, joined with current user
@@ -68,23 +70,31 @@ public class User extends BaseModel implements UserDetails  {
     private Set<User> relatedUsers = new HashSet<>();
 
     @ManyToMany(fetch = FetchType.EAGER)
+    @JsonIgnore
     private List<Permission> permissions;
 
     @OneToMany(mappedBy = "fromUser")
+    @JsonIgnore
     private List<Chat> fromChats;
 
     @OneToMany(mappedBy = "toUser")
+    @JsonIgnore
     private List<Chat> toChats;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Post> posts;
 
 
     @ManyToMany()
+    @JsonIgnore
+
     private List<Group> groups;
 
 
     @OneToMany(mappedBy = "author")
+    @JsonIgnore
+
     private List<Group> createdGroups;
 
 

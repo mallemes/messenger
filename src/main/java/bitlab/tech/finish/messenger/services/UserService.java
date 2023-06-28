@@ -78,6 +78,12 @@ public class UserService implements UserDetailsService {
     public List<Chat> userChat(User from, User to) {
         return chatRepository.findAllByFromUserAndToUserOrToUserAndFromUserOrderByCreatedAt(from, to, from, to);
     }
+//    public List<Chat> userChat(User from) {
+//        return chatRepository.findAllByFromUserOrToUserOrderByCreatedAt(from, from);
+//    }
+    public List<Chat> dd() {
+        return chatRepository.findAll();
+    }
 
     public List<User> searchUsers(String query) {
         return userRepository
