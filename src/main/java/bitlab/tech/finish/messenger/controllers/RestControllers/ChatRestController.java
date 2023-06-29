@@ -1,6 +1,8 @@
 package bitlab.tech.finish.messenger.controllers.RestControllers;
 
 import bitlab.tech.finish.messenger.dto.ChatDTO;
+import bitlab.tech.finish.messenger.dto.UserDTO;
+import bitlab.tech.finish.messenger.mapper.UserMapper;
 import bitlab.tech.finish.messenger.models.User;
 import bitlab.tech.finish.messenger.services.ChatService;
 import bitlab.tech.finish.messenger.services.UserService;
@@ -19,20 +21,19 @@ public class ChatRestController {
 
     private final ChatService chatService;
     private final UserService userService;
+    private final UserMapper userMapper;
 
 
 
     @GetMapping(value = "/{username}")
     public ResponseEntity<ChatResponse> getUserChat(@PathVariable String username) {
-        User toUser = userService.getUserByUsername(username);
-
-        User authUser = userService.getUserByUsername("mallemes");
-//        User authUser = userService.getUserByUsername(userService.getCurrentSessionUser().getUsername());
-        if (toUser == null) {
+        UserDTO toUserDTO = userService.getUserByUsernameDTO(username);
+        UserDTO authUserDTO = userMapper.toUserDTO(userService.getUserByUsername(userService.getCurrentSessionUser().getUsername()));
+        if (toUserDTO == null) {
             return ResponseEntity.notFound().build();
         }
-        List<ChatDTO> chatResponse = userService.userChatDTO(authUser, toUser);
-        ChatResponse response = new ChatResponse(chatResponse, authUser.getId());
+        List<ChatDTO> chatResponse = userService.userChatDTO(authUserDTO, toUserDTO);
+        ChatResponse response = new ChatResponse(chatResponse, authUserDTO.getId());
         return ResponseEntity.ok(response);
     }
 

@@ -1,7 +1,9 @@
 package bitlab.tech.finish.messenger.services;
 
 import bitlab.tech.finish.messenger.dto.ChatDTO;
+import bitlab.tech.finish.messenger.dto.UserDTO;
 import bitlab.tech.finish.messenger.mapper.ChatMapper;
+import bitlab.tech.finish.messenger.mapper.UserMapper;
 import bitlab.tech.finish.messenger.models.Chat;
 import bitlab.tech.finish.messenger.models.User;
 import bitlab.tech.finish.messenger.repositories.ChatRepository;
@@ -30,6 +32,9 @@ public class UserService implements UserDetailsService {
 
     @Autowired
     private ChatMapper chatMapper;
+
+    @Autowired
+    private UserMapper userMapper;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -93,8 +98,13 @@ public class UserService implements UserDetailsService {
 
 
     // dto mapper methods
-    public List<ChatDTO> userChatDTO(User from, User to) {
-        return chatMapper.toChatDTOList(chatRepository.findAllByFromUserAndToUserOrToUserAndFromUserOrderByCreatedAt(from, to, from, to));
+    public List<ChatDTO> userChatDTO(UserDTO from, UserDTO to) {
+        User fromUser = userMapper.toEntityUser(from);
+        User toUser = userMapper.toEntityUser(to);
+        return chatMapper.toChatDTOList(chatRepository.findAllByFromUserAndToUserOrToUserAndFromUserOrderByCreatedAt(fromUser, toUser, fromUser, toUser));
+    }
+    public UserDTO getUserByUsernameDTO(String username) {
+        return userMapper.toUserDTO(userRepository.findByUsername(username));
     }
 
 }
