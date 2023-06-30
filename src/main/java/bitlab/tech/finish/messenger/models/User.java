@@ -86,15 +86,13 @@ public class User extends BaseModel implements UserDetails  {
     private List<Post> posts;
 
 
-    @ManyToMany()
+    @ManyToMany
     @JsonIgnore
-
     private List<Group> groups;
 
 
     @OneToMany(mappedBy = "author")
     @JsonIgnore
-
     private List<Group> createdGroups;
 
 

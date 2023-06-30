@@ -49,6 +49,7 @@
 }
 
 .chat-body .messages-content {
+  overflow: auto;
   display: -webkit-box;
   display: -webkit-flex;
   display: -moz-box;

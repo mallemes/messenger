@@ -30,6 +30,7 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	implementation group: 'org.apache.commons', name: 'commons-collections4', version: '4.4'
 	implementation 'org.mapstruct:mapstruct:1.5.5.Final'
+	implementation 'org.liquibase:liquibase-core'
 	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'

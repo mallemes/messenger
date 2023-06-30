@@ -9,7 +9,7 @@
             <h5 class="card-title" th:text="'Users group is : '+${group.name}"></h5>
             <!-- List group  -->
             <div class="list-group">
-                <div th:each="user:${users}" class="d-flex mt-2">
+                <div th:each="user:${group.users}" class="d-flex mt-2">
                     <a th:href="@{'/profile/'+${user.username}}" class="list-group-item list-group-item-action d-flex"
                        aria-current="true">
                         <div style="width: 20%">
@@ -21,6 +21,7 @@
                                 <h5 class="mb-1" th:text="${user.username}"></h5>
                                 <small th:text="${user.getCreatedAtFormatted()}"></small>
                             </div>
+                            <p th:text="${users.size()}"></p>
                             <p class="mb-1" th:text="'Full name is: '+${user.getFullName()}"></p>
                         </div>
 

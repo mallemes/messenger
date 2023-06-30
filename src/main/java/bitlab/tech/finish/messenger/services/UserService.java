@@ -79,6 +79,9 @@ public class UserService implements UserDetailsService {
         }
         return null;
     }
+    public User getUserByUsernameWithGroups(String username) {
+        return userRepository.findUserWithGroupsByUsername(username);
+    }
 
     public List<Chat> userChat(User from, User to) {
         return chatRepository.findAllByFromUserAndToUserOrToUserAndFromUserOrderByCreatedAt(from, to, from, to);

@@ -28,6 +28,7 @@ const loadChats = () => {
     // Выполняем AJAX-запрос к REST API для получения сообщений
     $.get("/api/v1/chat/" + username)
         .done(function (response) {
+
             const chats = response.chats;
             let messagesData = "";
             for (let i = 0; i < chats.length; i++) {
@@ -54,7 +55,8 @@ const loadChats = () => {
             //append response to messagesContent
             messagesContent.html(messagesData);
             // bottom scroll
-            messagesContent.scrollTop(messagesContent[0].scrollHeight);
+            messagesContent.scrollTop(messagesContent.prop("scrollHeight"));
+            console.log(messagesContent.prop("scrollHeight"));
         }).fail(function (xhr, status, error) {
         // Обработка ошибки
         console.error(error);
