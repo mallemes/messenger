@@ -18,8 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.regex.Pattern;
+import java.util.Set;
 
 @Controller
 @RequestMapping(value = "/groups")
@@ -58,10 +57,7 @@ public class GroupController {
         Group group = groupService.getGroupBySlug(groupSlug);
         if (group == null)
             return "redirect:/groups/" + auth.getUsername();
-        List<Group> groups = auth.getGroups();
-        if (!groups.contains(group))
-            groups.add(group);
-        auth.setGroups(groups);
+        auth.getGroups().add(group);
         userService.saveUser(auth);
         return "redirect:/groups/" + auth.getUsername();
     }
@@ -79,12 +75,14 @@ public class GroupController {
     @PreAuthorize("isAuthenticated()")
     @PostMapping(value = "/create")
     public String createGroup(Group group,
-                              @RequestParam(name = "groupImage") MultipartFile image) throws IOException {
+                              @RequestParam(name = "groupImage", required = false) MultipartFile image) throws IOException {
         if (groupService.getGroupBySlug(group.getSlug()) != null)
             return "redirect:/error?error";
 
-        String fileName = fileStorageService.saveFile(image, groupsImagesPath); // save file to /resources/static/storage/groups
-        group.setImage(fileName);
+        if (!image.isEmpty()){
+            String fileName = fileStorageService.saveFile(image, groupsImagesPath); // save file to /resources/static/storage/groups
+            group.setImage(fileName);
+        }
         group.setAuthor(userService.getCurrentSessionUser());
         Group g = groupService.save(group);
         User auth = userService.getUserByUsername(userService.getCurrentSessionUser().getUsername());
@@ -97,13 +95,13 @@ public class GroupController {
     @PostMapping(value = "/create/post")
     public String createPost(
             @RequestParam(name = "postText") String text,
-            @RequestParam(name = "postImage") MultipartFile image,
+            @RequestParam(name = "postImage", required = false) MultipartFile image,
             @RequestParam(name = "groupSlug") String groupSlug) {
         try {
             Group group = groupService.getGroupBySlug(groupSlug);
             GPost post = new GPost();
             post.setText(text);
-            if (!image.isEmpty()) {
+            if (!image.isEmpty() ) {
                 String fileName = fileStorageService.saveFile(image, postsImagesPath); // save file to /resources/static/storage/posts
                 post.setImage(fileName);
             }

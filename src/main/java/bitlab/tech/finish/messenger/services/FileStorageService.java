@@ -21,7 +21,7 @@ public class FileStorageService {
         String fileName =  UUID.randomUUID() + "_" + file.getOriginalFilename();
         Resource staticResource = resourceLoader.getResource("classpath:static");
         String staticFolderPath = staticResource.getFile().getAbsolutePath();
-        String filePath = staticFolderPath + fileStoragePath + fileName; // /static/storage/users/fileName
+        String filePath = staticFolderPath + fileStoragePath + fileName; // /static/storage/fileStoragePath/fileName
         File destFile = new File(filePath);
         file.transferTo(destFile);
         return fileStoragePath + fileName;
