@@ -1,8 +1,10 @@
 package bitlab.tech.finish.messenger.controllers;
+import bitlab.tech.finish.messenger.models.Permission;
 import bitlab.tech.finish.messenger.models.Post;
 import bitlab.tech.finish.messenger.models.User;
 import bitlab.tech.finish.messenger.models.group_p.GPost;
 import bitlab.tech.finish.messenger.services.GroupService;
+import bitlab.tech.finish.messenger.services.PermissionService;
 import bitlab.tech.finish.messenger.services.PostService;
 import bitlab.tech.finish.messenger.services.UserService;
 import lombok.RequiredArgsConstructor;
@@ -28,14 +30,15 @@ public class MainController {
     private final UserService userService;
     private final GroupService groupService;
     private final PostService postService;
+    private final PermissionService permissionService;
 
     @GetMapping(value = "/") // index page
     public String indexPage(Model model) {
        List<GPost>allPosts = postService.allGroupPosts();
         if (CollectionUtils.isNotEmpty(allPosts)) {
-            // Перемешиваем список постов
+            // Shuffle the list of posts
             Collections.shuffle(allPosts);
-            // Получаем первые 5 случайных постов
+            // Get the first 5 random posts
             List<GPost> randomPosts = ListUtils.partition(allPosts, 5).get(0);
             model.addAttribute("posts", randomPosts);
         }
@@ -71,6 +74,7 @@ public class MainController {
             user.setPassword(password);
             User newUser = userService.addUser(user);
             if (newUser != null) {
+                newUser.getPermissions().add(permissionService.userRolePermission());
                 return "redirect:/register?success";
             } else {
                 return "redirect:/register?username_error";

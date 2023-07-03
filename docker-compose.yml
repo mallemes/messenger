@@ -1,0 +1,23 @@
+version: "3.1"
+services:
+  project:
+    image: 'messenger-isa'
+    container_name: 'messenger-container'
+    depends_on:
+      - db
+    environment:
+      - SERVER_PORT=5000
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/bitlab_messenger_db
+    ports:
+      - "8767:5000"
+  db:
+    image: 'postgres:latest'
+    container_name: 'messenger-db'
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=bitlab_messenger_db
+    ports:
+      - "5432:5432"

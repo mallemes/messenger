@@ -64,6 +64,7 @@ public class ProfileController {
             userService.saveUser(user);
             return "redirect:/profile/" + user.getUsername();
         } catch (IOException e) {
+            System.out.println(e.getMessage());
             return "redirect:/error?error";
         }
     }

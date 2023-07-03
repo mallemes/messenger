@@ -52,6 +52,8 @@ public class User extends BaseModel implements UserDetails  {
     @Column(name = "bio" ,columnDefinition = "TEXT")
     private String bio;
 
+    @Column(name = "is_banned", columnDefinition = "boolean default false")
+    private boolean isBanned;
 
 
 
