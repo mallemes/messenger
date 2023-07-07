@@ -48,9 +48,7 @@ public class UserService implements UserDetailsService {
             throw new UsernameNotFoundException("User not found");
 
         if (user.isBanned()) {// if user is banned throw exception
-            System.out.println("User is banned");
-            System.out.println("11111111111111111111111111111111111111111111111111111111111111111111111111");
-            throw new DisabledException("User is banned");
+            throw new UsernameNotFoundException("User is banned");
         }
         return user;
     }
@@ -68,11 +66,10 @@ public class UserService implements UserDetailsService {
         if (checkUser == null) {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             User savingUser = userRepository.save(user);
-            savingUser.setPermissions(new HashSet<>()); // Инициализация множества permissions
             Permission userRolePermission = permissionService.userRolePermission();
             savingUser.getPermissions().add(userRolePermission);
             savingUser.setBanned(false);
-            userRepository.save(savingUser); // Сохранение обновленного пользователя
+            userRepository.save(savingUser); //save user with role
             return savingUser;
         }
         return null;
@@ -94,18 +91,10 @@ public class UserService implements UserDetailsService {
         }
         return null;
     }
-
-    public User getUserByUsernameWithGroups(String username) {
-        return userRepository.findUserWithGroupsByUsername(username);
-    }
-
     public List<Chat> userChat(User from, User to) {
         return chatRepository.findAllByFromUserAndToUserOrToUserAndFromUserOrderByCreatedAt(from, to, from, to);
     }
 
-    public List<Chat> dd() {
-        return chatRepository.findAll();
-    }
 
     public List<User> searchUsers(String query) {
         return userRepository
@@ -127,6 +116,14 @@ public class UserService implements UserDetailsService {
 
     public List<UserDTO> userListDTO() {
         return userMapper.toUserDTOList(userRepository.findAll().stream().toList());
+    }
+
+    public void toggleBan(Long id, boolean banned) { // toggle ban user by id
+        User user = userRepository.findById(id).orElse(null);
+        if (user != null) {
+            user.setBanned(banned);
+            userRepository.save(user);
+        }
     }
 
 }

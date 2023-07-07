@@ -94,7 +94,7 @@
                 </div>
                 <!--      foreach loop      -->
                 <div class="col-md-8" th:each="post: ${group.posts}">
-                    <div class="card">
+                    <div class="card" >
                         <div class="card-header">
                             <div class="d-flex">
                                 <a th:href="@{'/profile/' + ${post.author.username}}"><img

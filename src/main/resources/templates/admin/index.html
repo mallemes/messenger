@@ -36,27 +36,49 @@
     </section>
 
     <script>
-        $.ajax({
-            'url': "/api/v1/admin/users",
-            'method': "GET",
-            'contentType': 'application/json'
-        }).done(function (data) {
-            console.log(data);
-            const users = data;
-            let table_data_values = "";
-            for (let i = 0; i < users.length; i++) {
-                const user = users[i];
-                 table_data_values += "<tr>" +
-                    "<td width='10%'> <img width='10px' height='10px' src='"+user.avatar+"' alt=''></td>" +
-                    "<td>" + user.username + "</td>" +
-                    "<td>" + user.fullName + "</td>" +
-                    "<td>" + user.dataRegistration + "</td>" +
-                    "<td>" + user.firstName + "</td>" +
-                    "</tr>";
+        $(document).ready(function () {
+            getUsers();
+        });
 
-            }
-            $("#table_data").html(table_data_values);
-        })
+        const getUsers = () => {
+            $.ajax({
+                'url': "/api/v1/admin/users",
+                'method': "GET",
+                'contentType': 'application/json'
+            }).done(function (data) {
+                console.log(data);
+                const users = data;
+                let table_data_values = "";
+                for (let i = 0; i < users.length; i++) {
+                    const user = users[i];
+                    let userFullName = (user.firstName && user.lastName) ? `${user.firstName} ${user.lastName}` :
+                        user.firstName ? user.firstName :
+                            user.lastName ? user.lastName : user.username;
+                    let btn =
+                        user.banned ? "<button class='btn btn-success btn-sm' onclick='banUser(" + user.id + ", false)'>Unban</button>" :
+                            "<button class='btn btn-danger btn-sm' onclick='banUser(" + user.id + ", true)'>Ban</button>";
+                    table_data_values += "<tr>" +
+                        "<td width='10%'> <img width='20px' height='20px' src='" + user.avatar + "' alt=''></td>" +
+                        "<td> <a href='/profile/" + user.username + "'>" + user.username + "</a></td>" +
+                        "<td>" + userFullName + "</td>" +
+                        "<td>" + user.createdAt + "</td>" +
+                        "<td>" + btn + "</td>" +
+                        "</tr>";
+
+                }
+                $("#table_data").html(table_data_values);
+            })
+        }
+
+        function banUser(userId, banned) {
+            console.log(userId, banned);
+            const url = "/api/v1/admin/users/toggle/ban";
+            const data = {user_id: userId, banned: banned};
+            $.post(url, data, function (data) {
+                console.log(data);
+                getUsers();
+            })
+        }
     </script>
 </div>
 

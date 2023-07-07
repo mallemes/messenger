@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -24,4 +25,29 @@ public class UserDTO {
     private String avatar;
     private String phoneNumber;
     private String bio;
+    private boolean isBanned;
+
+    public String getCreatedAt() {
+        LocalDateTime now = LocalDateTime.now();
+        long seconds = ChronoUnit.SECONDS.between(createdAt, now);
+
+        if (seconds < 60) {
+            return seconds + " seconds ago";
+        } else if (seconds < 3600) {
+            long minutes = ChronoUnit.MINUTES.between(createdAt, now);
+            return minutes + " minutes ago";
+        } else if (seconds < 86400) {
+            long hours = ChronoUnit.HOURS.between(createdAt, now);
+            return hours + " hours ago";
+        } else {
+            long days = ChronoUnit.DAYS.between(createdAt, now);
+            return days + " days ago";
+        }
+    }
+    public String getAvatar() {
+        if (avatar == null) {
+            return "/defaults/default-user.png";
+        }
+        return avatar;
+    }
 }

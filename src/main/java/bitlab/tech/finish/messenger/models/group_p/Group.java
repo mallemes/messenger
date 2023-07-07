@@ -4,16 +4,15 @@ package bitlab.tech.finish.messenger.models.group_p;
 import bitlab.tech.finish.messenger.models.BaseModel;
 import bitlab.tech.finish.messenger.models.User;
 import jakarta.persistence.*;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.List;
 import java.util.Set;
 
 @Entity
 @Table(name = "t_groups")
-@Data
+@Setter
+@Getter
 public class Group extends BaseModel {
 
 
@@ -33,7 +32,7 @@ public class Group extends BaseModel {
     private String image;
 
     @OneToMany(mappedBy = "group", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<GPost> posts;
+    private Set<GPost> posts;
 
     @ManyToOne(fetch = FetchType.EAGER)
     private User author;
