@@ -1,6 +1,5 @@
 package bitlab.tech.finish.messenger.repositories;
 
-import bitlab.tech.finish.messenger.models.Chat;
 import bitlab.tech.finish.messenger.models.User;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;

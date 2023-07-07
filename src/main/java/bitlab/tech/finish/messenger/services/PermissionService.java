@@ -25,7 +25,7 @@ public class PermissionService {
             return permissionRepository.findByRole(permission);
         }
         public Permission userRolePermission(){
-            return permissionRepository.findByRole("USER_ROLE");
+            return permissionRepository.findByRole("ROLE_USER");
         }
 
 

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -18,7 +19,7 @@ import java.util.Set;
 @Table(name = "t_users")
 @Getter
 @Setter
-
+@ToString
 public class User extends BaseModel implements UserDetails  {
 
 
@@ -71,9 +72,9 @@ public class User extends BaseModel implements UserDetails  {
     )
     private Set<User> relatedUsers = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JsonIgnore
-    private List<Permission> permissions;
+    private Set<Permission> permissions = new HashSet<>();
 
     @OneToMany(mappedBy = "fromUser")
     @JsonIgnore

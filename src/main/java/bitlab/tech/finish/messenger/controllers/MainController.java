@@ -1,6 +1,5 @@
 package bitlab.tech.finish.messenger.controllers;
-import bitlab.tech.finish.messenger.models.Permission;
-import bitlab.tech.finish.messenger.models.Post;
+
 import bitlab.tech.finish.messenger.models.User;
 import bitlab.tech.finish.messenger.models.group_p.GPost;
 import bitlab.tech.finish.messenger.services.GroupService;
@@ -30,7 +29,8 @@ public class MainController {
     private final UserService userService;
     private final GroupService groupService;
     private final PostService postService;
-    private final PermissionService permissionService;
+
+
 
     @GetMapping(value = "/") // index page
     public String indexPage(Model model) {
@@ -74,7 +74,6 @@ public class MainController {
             user.setPassword(password);
             User newUser = userService.addUser(user);
             if (newUser != null) {
-                newUser.getPermissions().add(permissionService.userRolePermission());
                 return "redirect:/register?success";
             } else {
                 return "redirect:/register?username_error";

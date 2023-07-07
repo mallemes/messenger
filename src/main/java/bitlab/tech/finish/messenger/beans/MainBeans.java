@@ -11,4 +11,5 @@ public class MainBeans {
     public ResourceLoader resourceLoader() {
         return new DefaultResourceLoader();
     }
+
 }

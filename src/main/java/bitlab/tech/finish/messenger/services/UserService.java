@@ -5,11 +5,13 @@ import bitlab.tech.finish.messenger.dto.UserDTO;
 import bitlab.tech.finish.messenger.mapper.ChatMapper;
 import bitlab.tech.finish.messenger.mapper.UserMapper;
 import bitlab.tech.finish.messenger.models.Chat;
+import bitlab.tech.finish.messenger.models.Permission;
 import bitlab.tech.finish.messenger.models.User;
 import bitlab.tech.finish.messenger.repositories.ChatRepository;
 import bitlab.tech.finish.messenger.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,6 +19,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.HashSet;
 import java.util.List;
 
 public class UserService implements UserDetailsService {
@@ -35,15 +38,21 @@ public class UserService implements UserDetailsService {
 
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private PermissionService permissionService;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException, DisabledException {
         User user = userRepository.findByUsername(username);
-        if (user != null) {
-            return user;
-        } else {
-            throw new UsernameNotFoundException("User Not found");
+        if (user == null)  // if user not found throw exception
+            throw new UsernameNotFoundException("User not found");
+
+        if (user.isBanned()) {// if user is banned throw exception
+            System.out.println("User is banned");
+            System.out.println("11111111111111111111111111111111111111111111111111111111111111111111111111");
+            throw new DisabledException("User is banned");
         }
+        return user;
     }
 
     public User saveUser(User user) {
@@ -58,7 +67,13 @@ public class UserService implements UserDetailsService {
         User checkUser = userRepository.findByUsername(user.getUsername());
         if (checkUser == null) {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
-            return userRepository.save(user);
+            User savingUser = userRepository.save(user);
+            savingUser.setPermissions(new HashSet<>()); // Инициализация множества permissions
+            Permission userRolePermission = permissionService.userRolePermission();
+            savingUser.getPermissions().add(userRolePermission);
+            savingUser.setBanned(false);
+            userRepository.save(savingUser); // Сохранение обновленного пользователя
+            return savingUser;
         }
         return null;
     }
@@ -79,6 +94,7 @@ public class UserService implements UserDetailsService {
         }
         return null;
     }
+
     public User getUserByUsernameWithGroups(String username) {
         return userRepository.findUserWithGroupsByUsername(username);
     }
@@ -86,9 +102,7 @@ public class UserService implements UserDetailsService {
     public List<Chat> userChat(User from, User to) {
         return chatRepository.findAllByFromUserAndToUserOrToUserAndFromUserOrderByCreatedAt(from, to, from, to);
     }
-//    public List<Chat> userChat(User from) {
-//        return chatRepository.findAllByFromUserOrToUserOrderByCreatedAt(from, from);
-//    }
+
     public List<Chat> dd() {
         return chatRepository.findAll();
     }
@@ -106,8 +120,13 @@ public class UserService implements UserDetailsService {
         User toUser = userMapper.toEntityUser(to);
         return chatMapper.toChatDTOList(chatRepository.findAllByFromUserAndToUserOrToUserAndFromUserOrderByCreatedAt(fromUser, toUser, fromUser, toUser));
     }
+
     public UserDTO getUserByUsernameDTO(String username) {
         return userMapper.toUserDTO(userRepository.findByUsername(username));
+    }
+
+    public List<UserDTO> userListDTO() {
+        return userMapper.toUserDTOList(userRepository.findAll().stream().toList());
     }
 
 }
