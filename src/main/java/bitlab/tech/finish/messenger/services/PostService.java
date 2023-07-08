@@ -21,7 +21,7 @@ public class PostService {
 
 
 
-    public void deletePostById(Long id) {
+    public void deletePostById(Long id) { // is auth user delete post by id
         postRepository.deletePostById(id);
     }
 

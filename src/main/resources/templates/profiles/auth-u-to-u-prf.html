@@ -118,33 +118,13 @@
                                     alt="profile" width="50"
                                     class="rounded-circle"
                                     style="border: 1px solid #DBDBDB"></a>
-                            <i class="bi bi-three-dots-vertical"
-                               style="position: absolute; right: 25px; cursor:pointer;" data-bs-toggle="dropdown"
-                               aria-expanded="false"></i>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item"
-                                       href="#">complain</a></li>
-                                <li><a class="dropdown-item" href="#">share</a></li>
-                                <li><a class="dropdown-item" href="#">edit</a></li>
-                                <li>
-                                    <form action="#" method="post">
-
-                                        <a href="#" class="dropdown-item">
-                                            <button type="submit" class="border-0 bg-transparent">
-                                                delete
-                                            </button>
-                                        </a>
-                                    </form>
-                                </li>
-                            </ul>
                             <span><a href="#"
-                                     style="margin-left: 15px; margin-top: 5px; color: black">user full name
+                                     style="margin-left: 15px; margin-top: 5px; color: black" th:text="${user.username}">
                                             <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Twitter_Verified_Badge.svg/1200px-Twitter_Verified_Badge.svg.png"
                                                  alt="" width="15" style="margin-bottom: 1px;">
                                     <span style="color:gray;"></span></a>
                             <br>
-                            <span style="font-size: 14px; color: gray; margin-left: 15px"
-                                  th:text="${post.createdAt}"></span>
+                            <span style="font-size: 14px; color: gray; margin-left: 15px" th:text="${post.difForHumans()}"></span>
                         </span>
                         </div>
                         <a href="#">
@@ -160,7 +140,7 @@
                         </a>
                         <div class="post-btns" style="width: 510px; margin-left: auto; margin-right: auto;">
                             <div style="float: left; display: flex">
-                                <form action="{{route('posts.rate', $post->id)}}" method="post">
+                                <form action="#" method="post">
 
                                     <button style="font-size: 12px; color:gray" class="bg-transparent border-0"
                                             type="submit">like
@@ -169,7 +149,7 @@
                                 <form action="">
                                     <button style="font-size: 12px; color: gray" class="bg-transparent border-0"><a
                                             style="color: gray"
-                                            href="{{route('posts.show', $post->id)}}">comment</a></button>
+                                            href="#">comment</a></button>
                                 </form>
                             </div>
                             <div class="post-count" style="float: right">
