@@ -1,8 +1,8 @@
 version: "3.1"
 services:
   project:
-    image: 'messenger-iso'
-    container_name: 'messenger-container'
+    image: 'mallemes/iso-messenger'
+    container_name: 'messenger-app'
     depends_on:
       - db
     environment:
