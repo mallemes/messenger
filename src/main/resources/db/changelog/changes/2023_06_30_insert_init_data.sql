@@ -46,7 +46,7 @@ INSERT INTO t_groups (name, slug, created_at, author_id)
 VALUES ('Java', 'java', now(), 1),
        ('Python', 'python', now(), 2),
        ('C++', 'c++', now(), 3),
-       ('C#', 'c#', now(), 5),
+       ('C#', 'c-sharp', now(), 5),
        ('JavaScript', 'javascript', now(), 1),
        ('PHP', 'php', now(), 2),
        ('Ruby', 'ruby', now(), 4),

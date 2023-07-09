@@ -16,9 +16,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.NoHandlerFoundException;
-
 import java.io.IOException;
-import java.util.Set;
 
 @Controller
 @RequestMapping(value = "/groups")
@@ -59,7 +57,7 @@ public class GroupController {
             return "redirect:/groups/" + auth.getUsername();
         auth.getGroups().add(group);
         userService.saveUser(auth);
-        return "redirect:/groups/" + auth.getUsername();
+        return "redirect:/groups/show/" + groupSlug;
     }
 
     @PreAuthorize("isAuthenticated()")
@@ -69,7 +67,7 @@ public class GroupController {
         Group group = groupService.getGroupBySlug(groupSlug);
         auth.getGroups().remove(group);
         userService.saveUser(auth);
-        return "redirect:/groups/" + auth.getUsername();
+        return "redirect:/groups/show/" + groupSlug;
     }
 
     @PreAuthorize("isAuthenticated()")

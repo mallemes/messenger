@@ -52,17 +52,13 @@ public class ChatRestController {
 }
 @Getter
 @Setter
- class ChatResponse {
+ class ChatResponse { // API response for chat between two users (list of messages) and current user id for front-end
     private List<ChatDTO> chats;
     private Long currentUserId;
 
     public ChatResponse(List<ChatDTO> chats, Long id) {
         this.chats = chats;
         this.currentUserId = id;
-    }
-
-    public List<ChatDTO> getChats() {
-        return chats;
     }
 
 }

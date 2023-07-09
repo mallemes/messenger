@@ -1,11 +1,10 @@
 package bitlab.tech.finish.messenger.controllers;
-import bitlab.tech.finish.messenger.dto.ChatDTO;
+
 import bitlab.tech.finish.messenger.models.User;
 import bitlab.tech.finish.messenger.services.ChatService;
 import bitlab.tech.finish.messenger.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

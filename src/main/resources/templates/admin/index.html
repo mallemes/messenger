@@ -57,11 +57,12 @@
                     let btn =
                         user.banned ? "<button class='btn btn-success btn-sm' onclick='banUser(" + user.id + ", false)'>Unban</button>" :
                             "<button class='btn btn-danger btn-sm' onclick='banUser(" + user.id + ", true)'>Ban</button>";
+                    let createdAt = difForHumans(user.createdAt);
                     table_data_values += "<tr>" +
                         "<td width='10%'> <img width='20px' height='20px' src='" + user.avatar + "' alt=''></td>" +
                         "<td> <a href='/profile/" + user.username + "'>" + user.username + "</a></td>" +
                         "<td>" + userFullName + "</td>" +
-                        "<td>" + user.createdAt + "</td>" +
+                        "<td>" + createdAt + "</td>" +
                         "<td>" + btn + "</td>" +
                         "</tr>";
 
@@ -79,6 +80,24 @@
                 console.log(data);
                 getUsers();
             })
+        }
+        function difForHumans(createdAt) {
+            const now = new Date();
+
+            const seconds = Math.floor((now - new Date(createdAt)) / 1000);
+
+            if (seconds < 60) {
+                return seconds + " seconds ago";
+            } else if (seconds < 3600) {
+                const minutes = Math.floor(seconds / 60);
+                return minutes + " minutes ago";
+            } else if (seconds < 86400) {
+                const hours = Math.floor(seconds / 3600);
+                return hours + " hours ago";
+            } else {
+                const days = Math.floor(seconds / 86400);
+                return days + " days ago";
+            }
         }
     </script>
 </div>

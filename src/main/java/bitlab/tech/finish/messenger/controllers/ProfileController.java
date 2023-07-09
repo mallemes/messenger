@@ -5,7 +5,6 @@ import bitlab.tech.finish.messenger.models.User;
 import bitlab.tech.finish.messenger.services.FileStorageService;
 import bitlab.tech.finish.messenger.services.PostService;
 import bitlab.tech.finish.messenger.services.UserService;
-import com.fasterxml.jackson.databind.deser.SettableAnyProperty;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;

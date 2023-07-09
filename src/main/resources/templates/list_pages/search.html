@@ -39,7 +39,7 @@
                                 <h5 class="mb-1" th:text="${group.name}"></h5>
                                 <small>group</small>
                             </div>
-                            <p class="mb-1" th:text="'status: '+${group.status}"></p>
+                            <p class="mb-1" th:text="'status: ' + (${group.status} ?: 'status is not')"></p>
                         </div>
 
                     </a>

@@ -44,7 +44,7 @@ public class PostService {
         return gPostRepository.findById(id).orElse(null);
     }
     public void deleteGroupPost(GPost post) {
-        gPostRepository.deleteById(post.getId());
+        gPostRepository.deleteGPostById(post.getId());
     }
 
 }

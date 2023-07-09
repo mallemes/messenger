@@ -3,22 +3,16 @@ package bitlab.tech.finish.messenger.controllers;
 import bitlab.tech.finish.messenger.models.User;
 import bitlab.tech.finish.messenger.models.group_p.GPost;
 import bitlab.tech.finish.messenger.services.GroupService;
-import bitlab.tech.finish.messenger.services.PermissionService;
 import bitlab.tech.finish.messenger.services.PostService;
 import bitlab.tech.finish.messenger.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.ListUtils;
-import org.springframework.http.HttpHeaders;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.NoHandlerFoundException;
-
 import java.util.Collections;
 import java.util.List;
 
@@ -31,10 +25,9 @@ public class MainController {
     private final PostService postService;
 
 
-
     @GetMapping(value = "/") // index page
     public String indexPage(Model model) {
-       List<GPost>allPosts = postService.allGroupPosts();
+        List<GPost> allPosts = postService.allGroupPosts();
         if (CollectionUtils.isNotEmpty(allPosts)) {
             // Shuffle the list of posts
             Collections.shuffle(allPosts);
@@ -111,33 +104,4 @@ public class MainController {
         return "list_pages/search";
     }
 
-    @GetMapping(value = "/friends/{username}") // friends page for user
-    public String friendsPage(@PathVariable String username, Model model) throws NoHandlerFoundException {
-        User currentUser = userService.getUserByUsername(username);
-        if (currentUser == null)
-            throw new NoHandlerFoundException("GET", "/friends/" + username, HttpHeaders.EMPTY);
-        model.addAttribute("friends", currentUser.getRelatedUsers());
-        model.addAttribute("currentUser", currentUser);
-        return "list_pages/friends";
-    }
-
-    @PreAuthorize("isAuthenticated()")
-    @PostMapping(value = "/friends/add")
-    public String addFriend(@RequestParam(name = "friend_username") String friendUsername) {
-        User auth = userService.getUserByUsername(userService.getCurrentSessionUser().getUsername());
-        User friend = userService.getUserByUsername(friendUsername);
-        auth.getRelatedUsers().add(friend);
-        userService.saveUser(auth);
-        return "redirect:/profile/" + friendUsername;
-    }
-
-    @PreAuthorize("isAuthenticated()")
-    @PostMapping(value = "/friends/remove")
-    public String removeFriend(@RequestParam(name = "friend_username") String friendUsername) {
-        User auth = userService.getUserByUsername(userService.getCurrentSessionUser().getUsername());
-        User friend = userService.getUserByUsername(friendUsername);
-        auth.getRelatedUsers().remove(friend);
-        userService.saveUser(auth);
-        return "redirect:/profile/" + friendUsername;
-    }
 }

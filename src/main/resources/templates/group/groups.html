@@ -1,5 +1,5 @@
 <!doctype html>
-<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="layouts/base.html"
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layouts/base.html}"
       xmlns:th="http://www.thymeleaf.org">
 
 
@@ -90,7 +90,8 @@
                                 <h5 class="mb-1" th:text="${group.name}"></h5>
                                 <small th:text="${group.getCreatedAtFormatted()}"></small>
                             </div>
-                            <p class="mb-1" th:text="'status: '+${group.status}"></p>
+                            <p class="mb-1" th:text="'status: ' + (${group.status} ?: 'status is not')"></p>
+
                         </div>
 
                     </a>
